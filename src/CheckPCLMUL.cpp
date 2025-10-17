@@ -7,11 +7,19 @@
 #if (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/opt/homebrew/include/simde/x86/clmul.h"
+#include "/Users/shoup/repos/simde/x86/clmul.h"
 
-#if (!defined(__GNUC__) || !defined(SIMDE_ARM_NEON_A64V8_NATIVE))
+#if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
 #error "PCLMUL not supported"
 #endif
+
+#if 1
+// hack to override SIMDE limitations
+
+#if (!defined(__GNUC__))
+#error "PCLMUL not supported"
+#endif
+
 
 #ifdef _mm_clmulepi64_si128 
 #undef _mm_clmulepi64_si128
@@ -28,6 +36,7 @@ arm_pclmul(__m128i a, __m128i b)
 }
 
 #define _mm_clmulepi64_si128(a, b, _ignore) arm_pclmul(a, b)
+#endif
 
 
 #else

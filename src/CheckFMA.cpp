@@ -8,12 +8,14 @@
 #if (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/opt/homebrew/include/simde/x86/fma.h"
+#include "/Users/shoup/repos/simde/x86/fma.h"
 
 #if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
 #error "AVX2 with FMA not supported well by simde"
 #endif
 
+#if 1
+// hack to override SIMDE limitations
 #ifdef _mm256_fmadd_pd
 #undef _mm256_fmadd_pd
 #endif
@@ -33,6 +35,7 @@ arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
 
 
 #define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
+#endif
 
 #else
 

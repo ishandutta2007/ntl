@@ -18,7 +18,7 @@
 #ifdef NTL_SIMDE_LIB
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/opt/homebrew/include/simde/x86/clmul.h"
+#include "/Users/shoup/repos/simde/x86/clmul.h"
 
 #ifdef SIMDE_ARM_NEON_A64V8_NATIVE
 
