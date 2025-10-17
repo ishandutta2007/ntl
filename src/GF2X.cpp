@@ -15,7 +15,38 @@
 
 #ifdef NTL_HAVE_PCLMUL
 
+#ifdef NTL_SIMDE_LIB
+
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include "/opt/homebrew/include/simde/x86/clmul.h"
+
+#ifdef SIMDE_ARM_NEON_A64V8_NATIVE
+
+#ifdef _mm_clmulepi64_si128 
+#undef _mm_clmulepi64_si128
+#endif
+
+
+inline static __m128i 
+arm_pclmul(__m128i a, __m128i b)
+{
+   __m128i res;
+   __asm__ ("pmull    %0.1q, %1.1d, %2.1d                \n\t"  
+           : "=w" (res) : "w" (a), "w" (b) );      
+   return res;
+}
+
+#define _mm_clmulepi64_si128(a, b, _ignore) arm_pclmul(a, b)
+
+
+#endif
+
+
+#else
+
 #include <wmmintrin.h>
+
+#endif
 
 #define NTL_INLINE inline
 

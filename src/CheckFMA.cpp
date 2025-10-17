@@ -2,21 +2,60 @@
 #include <NTL/ctools.h>
 
 #include <cstdlib>
-#include <immintrin.h>
 #include <iostream>
 
 
-#if (!defined(__GNUC__) || !defined(__x86_64__) || !defined(__AVX2__))
-#error "AVX2 with FMA not supported"
+#if (defined(NTL_SIMDE_LIB))
+
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include "/opt/homebrew/include/simde/x86/fma.h"
+
+#if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
+#error "AVX2 with FMA not supported well by simde"
 #endif
 
+#ifdef _mm256_fmadd_pd
+#undef _mm256_fmadd_pd
+#endif
+
+inline static __m256d
+arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
+{
+   simde__m256d_private
+   r_,
+   a_ = simde__m256d_to_private(a),
+   b_ = simde__m256d_to_private(b),
+   c_ = simde__m256d_to_private(c);
+   r_.m128d[0] = _mm_fmadd_pd(a_.m128d[0], b_.m128d[0], c_.m128d[0]);
+   r_.m128d[1] = _mm_fmadd_pd(a_.m128d[1], b_.m128d[1], c_.m128d[1]);
+   return simde__m256d_from_private(r_);
+}
+
+
+#define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
+
+#else
+
+#include <immintrin.h>
+
+#if (!defined(__GNUC__) || !defined(__x86_64__) || !defined(__AVX2__))
+#error "FMA not supported"
+#endif
+
+#endif
+
+
+
+
+
+
 #if (NTL_BITS_PER_LONG != 64 || NTL_BITS_PER_INT != 32 || NTL_DOUBLE_PRECISION != 53)
-#error "AVX2 with FMA not supported"
+#error "FMA not supported"
 // sanity check -- code that uses this feature also relies on this
 #endif
 
 #ifndef NTL_HAVE_ALIGNED_ARRAY
-#error "AVX2 with FMA not supported"
+#error "FMA not supported"
 #endif
 
 using namespace std;
