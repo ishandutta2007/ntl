@@ -4,16 +4,22 @@
 /* output (compiler_name,language_standard,cpu_type)
 
    compiler_name:
-   Right now, we just recognize "gcc", "clang", and "icc".
+   We recognize "gcc", "clang", and "icc".
    Other compilers are named "unknown".
 
    language_standard:
-   As of 2018, the available language standards are
-   199711, 201103, 201402, 201703.
+   one of 0, 1997, 2011, 2014, 2017, ...
 
    cpu_type:
-   Right now, we just recognize x86 and x86-64, and both are named "x86".
+   We recognize all x86 machines as "x86".
+   We recognize all arm machines as "arm".
+   By special request, we recognize IBM Z as "s390x"
    Other CPUs are named "unknown".
+
+   os_name:
+   We recognize "linux".
+   Other operating systems are named "unknown".
+
 
 */
 
