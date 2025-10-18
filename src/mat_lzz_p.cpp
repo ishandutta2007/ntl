@@ -9,22 +9,28 @@
 
 #ifdef NTL_HAVE_AVX
 
-#ifdef NTL_SIMDE_LIB
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
+#include <immintrin.h>
+#elif (defined(NTL_SIMDE_LIB))
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include "/Users/shoup/repos/simde/x86/avx.h"
 #else
-#include <immintrin.h>
+#error "configuration error"
 #endif
 
 #endif
 
 
-#if (defined(NTL_HAVE_AVX) && defined(NTL_HAVE_FMA))
+#ifdef NTL_HAVE_FMA
 
-#ifdef NTL_SIMDE_LIB
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
+
+// native FMA
+
+#elif (defined(NTL_SIMDE_LIB))
+
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include "/Users/shoup/repos/simde/x86/fma.h"
-
 
 #ifdef SIMDE_ARM_NEON_A64V8_NATIVE
 
@@ -45,12 +51,12 @@ arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
    return simde__m256d_from_private(r_);
 }
 
-
 #define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
 
 #endif
 
-
+#elif
+#error "configuration error"
 #endif
 
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 /* output (compiler_name,language_standard,cpu_type)
 
@@ -17,19 +18,20 @@
 */
 
 #ifndef __cplusplus
-#define __cplusplus 1
+#define __cplusplus 0
 #endif
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
+
+using namespace std;
 
 int main()
 {
-   long language_standard = __cplusplus;
-   // convert to one of 0, 1997, 2011, 2014, 2017
-   if      (language_standard >= 201703) language_standard = 2017;
-   else if (language_standard >= 201402) language_standard = 2014;
-   else if (language_standard >= 201103) language_standard = 2011;
-   else if (language_standard >= 199711) language_standard = 1997;
-   else                                  language_standard = 0;
+   long language_standard = atoi(TOSTRING(__cplusplus));
+   language_standard /= 100;
+   if (language_standard < 1997) language_standard = 0;
 
    const char *compiler_name = "unknown";
    const char *cpu_type = "unknown";
@@ -41,12 +43,12 @@ int main()
    compiler_name = "clang";
 #elif defined (__GNUC__)
    compiler_name = "gcc";
-#else
-   compiler_name = "";
 #endif
 
 #if defined(__x86_64__) || defined(__x86_64) || defined(__i386__) || defined(__i386)
    cpu_type = "x86";
+#elif defined(__ARM_ARCH) || defined(_M_ARM) || defined(_M_ARM64) || defined(_M_ARM64EC) || defined(__arm__) || defined(__thumb__) || defined(__TARGET_ARCH_ARM) || defined(_ARM) || defined(__aarch64__)  
+   cpu_type="arm";
 #elif defined(__s390x__)
    cpu_type = "s390x";
 #endif
@@ -55,7 +57,7 @@ int main()
    os_name = "linux";
 #endif
 
-   std::cout << "(" << compiler_name << "," << language_standard 
+   cout << "(" << compiler_name << "," << language_standard 
              << "," << cpu_type << "," << os_name << ")\n";
 
 }

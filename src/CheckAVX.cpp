@@ -4,28 +4,24 @@
 #include <iostream>
 
 
-#if (defined(NTL_SIMDE_LIB))
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
+
+#include <immintrin.h>
+
+#elif (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include "/Users/shoup/repos/simde/x86/avx.h"
 
 #if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-#error "AVX not supported well by simde"
+#error "AVX not supported"
 #endif
 
 #else
 
-#include <immintrin.h>
-
-#if (!defined(__GNUC__) || !defined(__x86_64__) || !defined(__AVX__))
 #error "AVX not supported"
-#endif
 
 #endif
-
-
-
-
 
 
 

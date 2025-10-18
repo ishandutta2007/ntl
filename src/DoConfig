@@ -628,12 +628,13 @@ unlink "need-to-run-configure";
 
 
 #get some rudimentary info from compiler
-# language_standard: one of 0, 1997, 2011, 2014, 2017.
+# language_standard: one of 0, 1997, 2011, 2014, 2017, ...
 #   used to set -std= flag intelligently
-# cpu_type: one of x86, s390x, unknown
+# cpu_type: one of x86, arm, s390x, unknown
 #   used to set TUNE intelligently
 # compiler_name: one of gcc, clang, icc, unknown
 #   used to set floating point flags intelligently
+# os_name: one of linux, unknown
 GenFiles();
 CopyFiles();
 RemoveProg("GenConfigInfo");
@@ -698,7 +699,12 @@ if ($pthread_flag) {
 }
    
 if ($native_flag) {
-   CheckFlag('-march=native');
+   if ($cpu_type eq "arm") {
+      CheckFlag('-mcpu=native');
+   }
+   else {
+      CheckFlag('-march=native');
+   }
 }
 
 # disable floating-point optimizations that are not value safe

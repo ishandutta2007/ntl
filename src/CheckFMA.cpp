@@ -5,17 +5,19 @@
 #include <iostream>
 
 
-#if (defined(NTL_SIMDE_LIB))
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
+
+#include <immintrin.h>
+
+#elif (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include "/Users/shoup/repos/simde/x86/fma.h"
 
 #if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-#error "AVX2 with FMA not supported well by simde"
+#error "AVX2 with FMA not supported"
 #endif
 
-#if 1
-// hack to override SIMDE limitations
 #ifdef _mm256_fmadd_pd
 #undef _mm256_fmadd_pd
 #endif
@@ -33,19 +35,12 @@ arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
    return simde__m256d_from_private(r_);
 }
 
-
 #define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
-#endif
 
 #else
-
-#include <immintrin.h>
-
-#if (!defined(__GNUC__) || !defined(__x86_64__) || !defined(__AVX2__))
 #error "FMA not supported"
 #endif
 
-#endif
 
 
 
