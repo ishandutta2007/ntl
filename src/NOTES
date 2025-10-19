@@ -1,4 +1,13 @@
 
+Changes:
+- simde stuff
+- tightened up some stuff using volatile to make sure 
+  constant folding was disabled during critical configuration calculations
+
+
+
+
+
 -----------------------------
 These are basically notes to myself on preparing a new
 distribution of NTL.
