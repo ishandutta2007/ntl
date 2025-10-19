@@ -39,7 +39,7 @@ int main()
    unsigned int x[4];
  
    for (long i = 0; i < 4; i++) {
-      a[i] = atoi("0") + i;
+      a[i] = _ntl_nofold(0) + i;
    }
 
 

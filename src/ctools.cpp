@@ -145,8 +145,6 @@ void _ntl_ForceToMem(double *p)
 }
 
 
-
-
 /*
  * The routine _ntl_ldexp(x, e) is like the standard ldexp(x, e) routine,
  * except that it takes a long exponent e, rather than an int exponenet.

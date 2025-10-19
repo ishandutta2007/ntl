@@ -79,14 +79,14 @@ int main()
 //----------------
 //      1000100000
 
-   unsigned long a = ((unsigned long) atoi("15")) << (NTL_BITS_PER_LONG-4);
-   unsigned long b = atoi("6");
+   unsigned long a = ((unsigned long) _ntl_nofold(15)) << (NTL_BITS_PER_LONG-4);
+   unsigned long b = _ntl_nofold(6);
    unsigned long c[2];
 
    pclmul_mul1(c, a, b);
 
-   unsigned long c0 = ((unsigned long) atoi("1")) << (NTL_BITS_PER_LONG-3);
-   unsigned long c1 = atoi("2");
+   unsigned long c0 = ((unsigned long) _ntl_nofold(1)) << (NTL_BITS_PER_LONG-3);
+   unsigned long c1 = _ntl_nofold(2);
 
    if (c[0] == c0 && c[1] == c1) 
       return 0;

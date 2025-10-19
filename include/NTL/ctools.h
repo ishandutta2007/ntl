@@ -374,6 +374,7 @@ void _ntl_ForceToMem(double *p);
 /* This is do-nothing routine that has the effect of forcing
    a double into memory (see comment above). */
 
+
 double _ntl_ldexp(double x, long e);
 
 
@@ -615,6 +616,14 @@ struct _ntl_enable_if<true, T> {
   typedef T type;
 };
 
+
+// returns x, disabling constant folding
+inline
+int _ntl_nofold(int x) 
+{
+   volatile int y = x;
+   return y;
+}
 
 
 
