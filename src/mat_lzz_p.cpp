@@ -32,7 +32,7 @@
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include "/Users/shoup/repos/simde/x86/fma.h"
 
-#ifdef SIMDE_ARM_NEON_A64V8_NATIVE
+#if defined(SIMDE_ARM_NEON_A64V8_NATIVE)
 
 #ifdef _mm256_fmadd_pd
 #undef _mm256_fmadd_pd
