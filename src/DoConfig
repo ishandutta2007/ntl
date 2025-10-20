@@ -2,6 +2,27 @@
 
 use warnings;  # this doesn't work on older versions of perl
 
+#
+#
+# general auxilliary routines
+
+sub Warning {
+
+   my ($s) = @_;
+   printf("\n*** WARNING: \n%s\n\n", $s);
+   return 1;
+}
+
+
+sub RemoveProg {
+# This should work on unix and cygwin on windows
+
+   my ($name) = @_;
+   unlink($name);  unlink("$name.exe");
+   return 1;
+}
+
+
 
 system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 
@@ -43,6 +64,9 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'GF2X_INCDIR'  => '$(GF2X_PREFIX)/include',
 'GF2X_LIBDIR'  => '$(GF2X_PREFIX)/lib',
 
+'SIMDE_PREFIX'  => '$(DEF_PREFIX)',
+'SIMDE_INCDIR'  => '$(SIMDE_PREFIX)/include',
+
 'MAKE_PROG'    => 'make',
 
 'TUNE'         => 'generic',
@@ -71,6 +95,7 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'NTL_THREAD_BOOST'        => 'on',
 'NTL_GMP_LIP'             => 'on',
 'NTL_GF2X_LIB'            => 'off',
+'NTL_SIMDE_LIB'           => 'off',
 'NTL_X86_FIX'             => 'off',
 'NTL_NO_X86_FIX'          => 'off',
 'NTL_NO_INIT_TRANS'       => 'on',
@@ -170,9 +195,10 @@ if ($ConfigFlag{'NTL_THREADS'} eq 'off') {
 }
 
 
-# special processing: CXXFLAGS contains '-march=' => NATIVE=off
+# special processing: 
+# CXXFLAGS contains -march=, -mcpu=, or -mtune => NATIVE=off
 
-if ($MakeVal{'CXXFLAGS'} =~ '-march=') {
+if ($MakeVal{'CXXFLAGS'} =~ '-march=|-mcpu=|-mtune=') {
    $MakeFlag{'NATIVE'} = 'off';
 }
 
@@ -223,7 +249,7 @@ if ($MakeFlag{'SHARED'} eq 'off') {
 
       print("***** checking for libtool *****\n");
       if (system("$MakeVal{'LIBTOOL'} --version")) {
-	 die "Error: bad libtool ($MakeVal{'LIBTOOL'}) -- try glibtool?";
+	 die "Error: bad libtool ($MakeVal{'LIBTOOL'}) -- try glibtool?\n";
       }
       print("***** libtool OK *****\n\n");
 
@@ -283,6 +309,22 @@ if ($ConfigFlag{'NTL_GF2X_LIB'} eq 'on') {
       $MakeVal{'GF2XL'} = '';
    }
 }
+
+# special SIMDE variables
+
+
+$MakeVal{'SIMDEI'} = '# ';
+
+
+if ($ConfigFlag{'NTL_SIMDE_LIB'} eq 'on') {
+   if (exists($Variable{'DEF_PREFIX'}) ||
+       exists($Variable{'SIMDE_PREFIX'}) ||
+       exists($Variable{'SIMDE_INCDIR'})) {
+      $MakeVal{'SIMDEI'} = '';
+   }
+}
+
+
 
 
 # copy %MakeVal and %MakeFlag as is into %MakeSub
@@ -358,29 +400,7 @@ if ($ConfigSub{'NTL_ENABLE_AVX_FFT'} == 1 && $MakeSub{'TUNE'} eq 'auto') {
 
 #
 #
-# useful auxilliary routines
-
-sub Warning {
-
-   my ($s) = @_;
-   printf("\n*** WARNING: \n%s\n\n", $s);
-   return 1;
-}
-
-
-sub RemoveProg {
-# This should work on unix and cygwin on windows
-
-   my ($name) = @_;
-   unlink($name);  unlink("$name.exe");
-   return 1;
-}
-
-sub RemoveFile {
-   my ($name) = @_;
-   unlink($name);  
-   return 1;
-}
+# more auxilliary routines
 
 sub GenFiles {
 
@@ -455,9 +475,9 @@ sub GenFiles {
 
 sub CopyFiles {
 
-   system("cp mfileout makefile") and die "Error: CopyFile failed";
-   system("cp cfileout ../include/NTL/config.h") and die "Error: CopyFile failed";;
-   system("cp hfileout ../include/NTL/ConfigLog.h") and die "Error: CopyFile failed";
+   system("cp mfileout makefile") and die "Error: CopyFile failed\n";
+   system("cp cfileout ../include/NTL/config.h") and die "Error: CopyFile failed\n";
+   system("cp hfileout ../include/NTL/ConfigLog.h") and die "Error: CopyFile failed\n";
 
    return 1;
 }
@@ -597,7 +617,7 @@ sub Process_TUNE {
 	 $ConfigSub{'NTL_GF2X_ALTCODE1'}       = 0,
       }
       else {
-	 die "Error: TUNE not in {auto,generic,x86,linux-s390x}";
+	 die "Error: TUNE not in {auto,generic,x86,linux-s390x}\n";
       }
    }
 }
@@ -643,14 +663,14 @@ system("echo '*** building GenConfigInfo' >> CompilerOutput.log");
 if(system("$MakeSub{'MAKE_PROG'} GenConfigInfo >> CompilerOutput.log 2>&1")) { 
    print("Compilation failed\n");
    print("See CompilerOutput.log for details\n");
-   die "Goodbye!";
+   die "Goodbye!\n";
 }
 
 my $config_info = `./GenConfigInfo`;
 
 my ($compiler_name, $language_standard, $cpu_type, $os_name);
 ($compiler_name, $language_standard, $cpu_type, $os_name) =
-   ($config_info =~ /\((.*?),(.*?),(.*?),(.*?)\)/) or die "Error: GenConfigInfo failed";
+   ($config_info =~ /\((.*?),(.*?),(.*?),(.*?)\)/) or die "Error: GenConfigInfo failed\n";
 
 # convert to number
 $language_standard += 0 or Warning("__cplusplus not correctly defined");
@@ -659,8 +679,6 @@ print("compiler_name=$compiler_name\n");
 print("language_standard=$language_standard\n");
 print("cpu_type=$cpu_type\n");
 print("os_name=$os_name\n\n");
-
-
 
 if (!exists($Variable{'TUNE'})) {
    if ($cpu_type eq "x86") {
@@ -677,46 +695,71 @@ if (!exists($Variable{'TUNE'})) {
 }
 
 
+#logic to set CXXAUTOFLAGS
 
 if (exists($Variable{'CXXAUTOFLAGS'})) {
    print("CXXAUTOFLAGS=\"$MakeSub{'CXXAUTOFLAGS'}\"\n");
-   GenFiles();
-   CopyFiles();
-   exit 0;
 }
+else {
 
 
-
-if ($min_std >= 2014) {
-   if ($language_standard < 2014) { CheckFlag('-std=c++14'); }
-}
-elsif ($min_std >= 2011) {
-   if ($language_standard < 2011) { CheckFlag('-std=c++11'); }
-}
-
-if ($pthread_flag) {
-   CheckFlag('-pthread');
-}
-   
-if ($native_flag) {
-   if ($cpu_type eq "arm") {
-      CheckFlag('-mcpu=native');
+   if ($min_std >= 2014) {
+      if ($language_standard < 2014) { CheckFlag('-std=c++14'); }
    }
-   else {
-      CheckFlag('-march=native');
+   elsif ($min_std >= 2011) {
+      if ($language_standard < 2011) { CheckFlag('-std=c++11'); }
+   }
+
+   if ($pthread_flag) {
+      CheckFlag('-pthread');
+   }
+      
+   if ($native_flag) {
+      if ($cpu_type eq "arm") {
+         CheckFlag('-mcpu=native');
+      }
+      else {
+         CheckFlag('-march=native');
+      }
+   }
+
+   # disable floating-point optimizations that are not value safe
+   # for most compilers, the default at optimzation  '-O2' is to 
+   # disable such optimizations. icc is the big exception,
+   # so we compile all of NTL with the "-fp-model precise" flag.
+   # On older IA-32 machines, this also has the effect of preventing
+   # calculations in "extended double" precision.
+
+   if ($compiler_name eq 'icc') {
+      CheckFlag('-fp-model precise');
    }
 }
 
-# disable floating-point optimizations that are not value safe
-# for most compilers, the default at optimzation  '-O2' is to 
-# disable such optimizations. icc is the big exception,
-# so we compile all of NTL with the "-fp-model precise" flag.
-# On older IA-32 machines, this also has the effect of preventing
-# calculations in "extended double" precision.
+# some SIMDE sanity checking
 
-if ($compiler_name eq 'icc') {
-   CheckFlag('-fp-model precise');
+sub CheckSIMDE {
+   return Exec("CheckSIMDE");
 }
+
+
+
+if ($ConfigSub{'NTL_SIMDE_LIB'} ) {
+
+   if (!CheckSIMDE()) {
+      die "Error: NTL_SIMDE_LIB set but not accessible -- set DEF_PREFIX or SIMDE_PREFIX to point to location of SIMDE\n";
+   }
+
+}
+else {
+   # currenly supported machines: 
+   # ARM 
+   if (!($cpu_type eq 'x86') && ($cpu_type eq 'arm')) {
+
+      print "\n*** Warning: this platform may benefit from using SIMDE by setting NTL_SIMDE_LIB=on\n";
+
+   }
+}
+
 
 
 # logic to disable floating-point contractions (FMA) in quad_float.cpp.
@@ -785,18 +828,30 @@ if ($ConfigSub{'NTL_THREADS'}) {
       print "*** threads are OK \n";
    }
    else {
-      if ($ConfigSub{'NTL_TLS_HACK'} == 0) { die "Error: threads are broken"; }
+      if ($ConfigSub{'NTL_TLS_HACK'} == 0) { die "Error: threads are broken\n"; }
       $ConfigSub{'NTL_TLS_HACK'} = 0;
       if (CheckThreads()) {
          print "*** threads are OK with NTL_TLS_HACK=off\n";
       }
       else {
-         die "Error: threads are broken";
+         die "Error: threads are broken\n";
       }
    }
 
 }
 
+# quick check to see if GMP is working
+# more careful checks are done in gen_gmp_aux later in the build process
+
+sub CheckGMP {
+   return Exec("CheckGMP");
+}
+
+if ($ConfigSub{'NTL_GMP_LIP'}) {
+   if (!CheckGMP()) {
+         die "Error: NTL_GMP_LIP set but GMP not available -- set DEF_PREFIX or GMP_PREFIX to point to location of GMP\n";
+   }
+}
 
 
 
@@ -808,7 +863,7 @@ unlink "setup-phase";
 # This will force make to run the setup phase
 
 system("touch need-to-run-configure") 
-   and die "Error: could not create need-to-run-configure";
+   and die "Error: could not create need-to-run-configure\n";
 
 print("\n");
 print("CXXAUTOFLAGS=\"$MakeSub{'CXXAUTOFLAGS'}\"\n");

@@ -11,7 +11,7 @@
 #elif (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/Users/shoup/repos/simde/x86/avx.h"
+#include <simde/x86/avx.h>
 
 #if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
 #error "AVX not supported"

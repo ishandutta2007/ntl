@@ -75,6 +75,7 @@ NATIVE=on
 # their fullest potential.  Note that if CXXFLAGS contains an '-march=XXX'
 # option, then NATIVE will be turned off.
 
+
 TUNE=generic (or x86 or linux-s390x)
 
 # Switch to determine how various performance options get set

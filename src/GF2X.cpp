@@ -12,43 +12,13 @@
 #include <gf2x.h>
 #endif
 
-
 #ifdef NTL_HAVE_PCLMUL
 
-#ifdef NTL_SIMDE_LIB
+#define NTL_INLINE inline
 
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/Users/shoup/repos/simde/x86/clmul.h"
-
-#ifdef SIMDE_ARM_NEON_A64V8_NATIVE
-
-#ifdef _mm_clmulepi64_si128 
-#undef _mm_clmulepi64_si128
-#endif
-
-
-inline static __m128i 
-arm_pclmul(__m128i a, __m128i b)
-{
-   __m128i res;
-   __asm__ ("pmull    %0.1q, %1.1d, %2.1d                \n\t"  
-           : "=w" (res) : "w" (a), "w" (b) );      
-   return res;
-}
-
-#define _mm_clmulepi64_si128(a, b, _ignore) arm_pclmul(a, b)
-
-
-#endif
-
-
-#else
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
 
 #include <wmmintrin.h>
-
-#endif
-
-#define NTL_INLINE inline
 
 static inline void
 pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
@@ -58,12 +28,41 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
    _mm_storeu_si128((__m128i*)c, _mm_clmulepi64_si128(aa, bb, 0));
 }
 
-#else
+#elif (defined(NTL_SIMDE_LIB))
 
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse2.h>
+#include <simde/x86/clmul.h>
+
+
+#if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
+
+static inline void
+pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
+{
+   _mm_storeu_si128((__m128i*)c, 
+                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
+}
+
+#else
+#error "configuration error"
+#endif
+
+
+#else
+#error "configuration error"
+
+#endif
+
+
+
+#else
 
 #define NTL_INLINE
 
 #endif
+
+
 
 NTL_START_IMPL
 

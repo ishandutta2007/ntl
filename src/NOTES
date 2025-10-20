@@ -1,8 +1,16 @@
 
 Changes:
 - simde stuff
+- set -mcpu=native instead of -march=native for ARM processors
 - tightened up some stuff using volatile to make sure 
   constant folding was disabled during critical configuration calculations
+
+documentation:
+ - ../doc/config.txt
+ - ../doc/tour-unix.html
+
+TODO:
+ - fix CheckContractAux.cpp
 
 
 

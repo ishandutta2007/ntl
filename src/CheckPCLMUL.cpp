@@ -4,60 +4,11 @@
 #include <iostream>
 
 
-#if (defined(NTL_SIMDE_LIB))
 
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/Users/shoup/repos/simde/x86/clmul.h"
-
-#if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-#error "PCLMUL not supported"
-#endif
-
-#if 1
-// hack to override SIMDE limitations
-
-#if (!defined(__GNUC__))
-#error "PCLMUL not supported"
-#endif
-
-
-#ifdef _mm_clmulepi64_si128 
-#undef _mm_clmulepi64_si128
-#endif
-
-
-inline static __m128i 
-arm_pclmul(__m128i a, __m128i b)
-{
-   __m128i res;
-   __asm__ ("pmull    %0.1q, %1.1d, %2.1d                \n\t"  
-           : "=w" (res) : "w" (a), "w" (b) );      
-   return res;
-}
-
-#define _mm_clmulepi64_si128(a, b, _ignore) arm_pclmul(a, b)
-#endif
-
-
-#else
-
-#include <wmmintrin.h>
-
-#if (!defined(__GNUC__) || !defined(__x86_64__) || !defined(__AVX__))
-#error "PCLMUL not supported"
-#endif
-
-#if (NTL_BITS_PER_LONG != 64)
-#error "PCLMUL not supported"
-#endif
-
+#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
 // NOTE: gcc and clang define __PCLMUL__, but icc does not
 
-#endif
-
-using namespace std;
-
-
+#include <wmmintrin.h>
 
 void
 pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
@@ -66,6 +17,44 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
    __m128i bb = _mm_setr_epi64( _mm_cvtsi64_m64(b), _mm_cvtsi64_m64(0));
    _mm_storeu_si128((__m128i*)c, _mm_clmulepi64_si128(aa, bb, 0));
 }
+
+#elif (defined(NTL_SIMDE_LIB))
+
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse2.h>
+#include <simde/x86/clmul.h>
+
+
+
+#if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
+
+void
+pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
+{
+   _mm_storeu_si128((__m128i*)c, 
+                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
+}
+
+#else
+#error "PCLMUL not supported"
+#endif
+
+
+#else
+#error "PCLMUL not supported"
+
+#endif
+
+
+
+#if (NTL_BITS_PER_LONG != 64)
+#error "PCLMUL not supported"
+#endif
+
+using namespace std;
+
+
+
 
 int main()
 {

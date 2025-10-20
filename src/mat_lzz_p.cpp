@@ -13,7 +13,7 @@
 #include <immintrin.h>
 #elif (defined(NTL_SIMDE_LIB))
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/Users/shoup/repos/simde/x86/avx.h"
+#include <simde/x86/avx.h>
 #else
 #error "configuration error"
 #endif
@@ -23,6 +23,10 @@
 
 #ifdef NTL_HAVE_FMA
 
+#ifndef NTL_HAVE_AVX
+#error "configuration error"
+#endif
+
 #if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
 
 // native FMA
@@ -30,7 +34,8 @@
 #elif (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include "/Users/shoup/repos/simde/x86/fma.h"
+#include <simde/x86/avx.h>
+#include <simde/x86/fma.h>
 
 #if defined(SIMDE_ARM_NEON_A64V8_NATIVE)
 
