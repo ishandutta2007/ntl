@@ -229,7 +229,7 @@ SCRIPTS=MakeGetTime MakeGetPID MakeCheckFeatures ResetFeatures CopyFeatures  \
 MD=MakeDesc.cpp MakeDescAux.cpp newnames.cpp gen_gmp_aux.cpp gf2x_version_1_2_or_later_required.cpp
 GT=GetTime0.cpp GetTime1.cpp GetTime2.cpp GetTime3.cpp GetTime4.cpp GetTime5.cpp TestGetTime.cpp
 GP=GetPID1.cpp GetPID2.cpp TestGetPID.cpp
-CH=CheckCompile.cpp GenConfigInfo.cpp CheckContract.cpp CheckContractAux.cpp \
+CH=CheckCompile.cpp GenConfigInfo.cpp CheckContract.cpp  \
 	CheckThreads.cpp CheckGMP.cpp CheckSIMDE.cpp
 
 AUXPROGS = TestGetTime TestGetPID CheckFeatures CheckCompile GenConfigInfo CheckContract \
@@ -411,8 +411,8 @@ CheckCompile: CheckCompile.cpp
 GenConfigInfo: GenConfigInfo.cpp
 	$(LINK) -o  GenConfigInfo GenConfigInfo.cpp $(LDLIBS)
 
-CheckContract: CheckContract.cpp CheckContractAux.cpp
-	$(LINK) $(NOCONTRACT) -o  CheckContract CheckContract.cpp CheckContractAux.cpp $(LDLIBS)
+CheckContract: CheckContract.cpp MakeDescAux.cpp
+	$(LINK) $(NOCONTRACT) -o  CheckContract CheckContract.cpp MakeDescAux.cpp $(LDLIBS)
 
 CheckThreads: CheckThreads.cpp
 	$(LINK) -o  CheckThreads CheckThreads.cpp $(LDLIBS)

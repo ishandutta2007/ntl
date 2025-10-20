@@ -51,23 +51,8 @@ void touch_ldouble(long double* x)
 
 
 
-double sum_double(double *x, long n)
-{
-   long i;
-   double acc = 0;
-
-   for (i = 0; i < n; i++)
-      acc += val_double(x[i]);
-
-   return acc;
-}
-
 double fma_test(double a, double b, double c)
 {
-   a = val_double(a);
-   b = val_double(b);
-   c = val_double(c);
-
    double t1 = a*b;
    double t2 = t1 + c;
    return t2;
@@ -75,11 +60,6 @@ double fma_test(double a, double b, double c)
 
 double reassoc_test(double a, double b, double c, double d)
 {
-   a = val_double(a);
-   b = val_double(b);
-   c = val_double(c);
-   d = val_double(d);
-
    double t1 = a*c + a*d;
    double t2 = b*c + b*d;
    return t1 + t2;
@@ -92,10 +72,10 @@ double power2(long k)
    long i;
    double res;
 
-   res = val_double(1);
+   res = 1;
 
    for (i = 1; i <= k; i++)
-      res = res * val_double(2);
+      res = res * 2;
 
    return res;
 }

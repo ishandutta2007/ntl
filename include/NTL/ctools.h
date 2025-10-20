@@ -618,12 +618,9 @@ struct _ntl_enable_if<true, T> {
 
 
 // returns x, disabling constant folding
-inline
-int _ntl_nofold(int x) 
-{
-   volatile int y = x;
-   return y;
-}
+int _ntl_nofold(int x); 
+long _ntl_nofold(long x); 
+double _ntl_nofold(double x); 
 
 
 

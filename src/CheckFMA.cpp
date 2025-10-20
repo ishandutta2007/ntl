@@ -80,10 +80,10 @@ double power2(long k)
    long i;
    double res;
 
-   res = _ntl_nofold(1);
+   res = 1;
 
    for (i = 1; i <= k; i++)
-      res = res * _ntl_nofold(2);
+      res = res * 2;
 
    return res;
 }
@@ -97,17 +97,17 @@ int main()
    double *b = vp + 1*4;
    double *x = vp + 2*4;
 
-   a[0] = double(_ntl_nofold(1)) + power2(NTL_DOUBLE_PRECISION-1);
+   a[0] = _ntl_nofold(1 + power2(NTL_DOUBLE_PRECISION-1));
    a[1] = _ntl_nofold(2);
    a[2] = _ntl_nofold(3);
    a[3] = _ntl_nofold(4);
 
-   b[0] = double(_ntl_nofold(1)) + power2(NTL_DOUBLE_PRECISION-1);
+   b[0] = _ntl_nofold(1 + power2(NTL_DOUBLE_PRECISION-1));
    b[1] = _ntl_nofold(3);
    b[2] = _ntl_nofold(4);
    b[3] = _ntl_nofold(5);
 
-   x[0] = -(double(_ntl_nofold(1)) + power2(NTL_DOUBLE_PRECISION-2))*power2(NTL_DOUBLE_PRECISION);
+   x[0] = _ntl_nofold(-(1 + power2(NTL_DOUBLE_PRECISION-2))*power2(NTL_DOUBLE_PRECISION));
    x[1] = _ntl_nofold(4);
    x[2] = _ntl_nofold(5);
    x[3] = _ntl_nofold(6);
