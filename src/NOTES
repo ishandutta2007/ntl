@@ -12,6 +12,9 @@ documentation:
 TODO:
  - take config.h out of INCL (should not go in tarball)
 
+Sppedups:
+Mat<ZZ_p> n=1000, k=1000, 6.05219 vs 12.8913
+
 
 
 -----------------------------
