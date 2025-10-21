@@ -80,9 +80,10 @@ int main()
 
    int test_var = _ntl_nofold(1);
    char *test_little_endian = (char*)&test_var;
+   if (!test_little_endian[0]) return -1;
 
 
-   if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26  && test_little_endian[0])
+   if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26)
       return 0;
    else
       return -1;

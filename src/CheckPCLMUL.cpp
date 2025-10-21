@@ -81,8 +81,10 @@ int main()
 
    int test_var = _ntl_nofold(1);
    char *test_little_endian = (char*)&test_var;
+   if (!test_little_endian[0]) return -1;
 
-   if (c[0] == c0 && c[1] == c1 && test_little_endian[0]) 
+
+   if (c[0] == c0 && c[1] == c1) 
       return 0;
    else
       return -1;
