@@ -75,7 +75,14 @@ int main()
 
    fun(x, a, b);
 
-   if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26)
+// sanity check: we require little endianness for general
+// compatability of memory layout (only needed when using SIMDE)
+
+   int test_var = _ntl_nofold(1);
+   char *test_little_endian = (char*)&test_var;
+
+
+   if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26  && test_little_endian[0])
       return 0;
    else
       return -1;
