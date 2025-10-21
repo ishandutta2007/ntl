@@ -9,6 +9,8 @@ documentation:
  - ../doc/config.txt
  - ../doc/tour-unix.html
 
+TODO:
+ - take config.h out of INCL (should not go in tarball)
 
 
 
