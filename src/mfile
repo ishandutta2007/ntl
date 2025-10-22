@@ -10,7 +10,6 @@
 CXX=@{CXX}
 # A C++ compiler, e.g., g++, CC, xlC
 
-
 CXXFLAGS=@{CXXFLAGS}
 # Flags for the C++ compiler
 
@@ -30,7 +29,7 @@ RANLIB=@{RANLIB}
 # set to echo if you want to disable it completely
 
 LDFLAGS=@{LDFLAGS}
-# libraries for linking C++ programs
+# flags for linking C++ programs
 
 LDLIBS=@{LDLIBS}
 # libraries for linking C++ programs
@@ -381,6 +380,7 @@ setup3:
 setup4:
 	sh Wizard $(WIZARD) "$(MAKE)" "$(FEATURES)"
 
+#### commands to build things
 
 ntl.a:	$(OBJ) 
 @{LSTAT}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #LSTAT
@@ -431,6 +431,21 @@ CheckSIMDE: CheckSIMDE.cpp
 .cpp: 
 @{LSTAT}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) #LSTAT
 @{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o $@ $< libntl.la #LSHAR
+
+#### auxilliary stuff to help build user example makefile
+
+INSTALLED_LIB=-L@{LIBDIR} -lntl 
+
+INSTALLED_INCLUDE=-I@{INCLUDEDIR} 
+
+INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
+
+static_command:
+	echo '$(LINK) -o $$@ $$< $(INSTALLED_LIB) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS)'
+
+shared_command:
+	echo '$(LINK) -o $$@ $$< $(INSTALLED_LIB)'
+
 
 #################################################################
 #
@@ -538,9 +553,10 @@ wclean:
 #################################################################
 
 libtool-gen-origin:
-	rm -rf libtool-origin && \
-	   cp -R libtool-seed libtool-origin && \
-	   cd libtool-origin && autoreconf -fiv && rm -rf autom4te.cache
+	rm -rf libtool-origin-tmp && \
+	   cp -R libtool-seed libtool-origin-tmp && \
+	   cd libtool-origin-tmp && autoreconf -fiv && rm -rf autom4te.cache
+	rm -rf libtool-origin && cp -R libtool-origin-tmp libtool-origin 
 
 ppdoc:
 	sh ppscript "$(TXFILES)"

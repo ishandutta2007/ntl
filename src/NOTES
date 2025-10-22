@@ -4,6 +4,7 @@ Changes:
 - set -mcpu=native instead of -march=native for ARM processors
 - tightened up some stuff using volatile to make sure 
   constant folding was disabled during critical configuration calculations
+- added UserMakefile.h
 
 documentation:
  - ../doc/config.txt
