@@ -443,70 +443,47 @@ sub GenFiles {
 # generate UserMakefile.txt
    
 
-   open(UMFILE, "< umfile");
+
    open(UMFILEOUT, "> umfileout");
-   
-   while ($line = <UMFILE>) {
-   
-      $line =~ s/@\{(.*?)\}/$MakeSub{$1}/ge;
-   
-      print UMFILEOUT $line;
-   
-   }
-   
-   close(UMFILE);
-   close(UMFILEOUT);
+   print UMFILEOUT "# This is a sample makefile that can be used to compile programs using \n";
+   print UMFILEOUT "# an installed version of NTL.\n";
+   print UMFILEOUT "# Using this ensures that your programs compile with the right flags\n";
+   print UMFILEOUT "# and link to the right libraries.\n";
+   print UMFILEOUT "#\n";
+   print UMFILEOUT "# The basic functionality provided by this makefile is to allow\n";
+   print UMFILEOUT "# you to compile 'foo.cpp' into the executable file 'foo' by executing\n";
+   print UMFILEOUT "#    make foo   \n";
+   print UMFILEOUT "# You can adapt this to the needs of your project as necessary.\n";
+   print UMFILEOUT "\n\n";
 
-   if (!system("touch foo.cpp && $MakeVal{'MAKE_PROG'} -f umfileout -n foo > make_foo.txt")) {
-      $line = `cat make_foo.txt`;
-      open(UMFILEOUT, ">> umfileout");
-
-      print UMFILEOUT "# For example, if you run make foo, this makefile will execute:\n";
-      print UMFILEOUT "# ";
-      print UMFILEOUT $line;
-      close(UMFILEOUT);
-   } 
-
-   open(UMFILEOUT1, "> umfileout1");
-   print UMFILEOUT1 "# This is a sample makefile that can be used to compile programs using \n";
-   print UMFILEOUT1 "# an installed version of NTL.\n";
-   print UMFILEOUT1 "# Using this ensures that your programs compile with the right flags\n";
-   print UMFILEOUT1 "# and link to the right libraries.\n";
-   print UMFILEOUT1 "#\n";
-   print UMFILEOUT1 "# The basic functionality provided by this makefile is to allow\n";
-   print UMFILEOUT1 "# you to compile foo.cpp into the executable file foo by executing\n";
-   print UMFILEOUT1 "#    make foo   \n";
-   print UMFILEOUT1 "# You can adapt this to the needs of your project as necessary.\n";
-   print UMFILEOUT1 "\n\n";
-
-   print UMFILEOUT1 ".cpp:\n";
+   print UMFILEOUT ".cpp:\n";
    $line = `$MakeVal{'MAKE_PROG'} -f mfileout -s static_command`;
-   if ($MakeFlag{'SHARED'} eq 'on') { print UMFILEOUT1 "#"; }
-   print UMFILEOUT1 "\t";
-   print UMFILEOUT1 $line;
+   if ($MakeFlag{'SHARED'} eq 'on') { print UMFILEOUT "#"; }
+   print UMFILEOUT "\t";
+   print UMFILEOUT $line;
    $line = `$MakeVal{'MAKE_PROG'} -f mfileout -s shared_command`;
-   if ($MakeFlag{'SHARED'} eq 'off') { print UMFILEOUT1 "#"; }
-   print UMFILEOUT1 "\t";
-   print UMFILEOUT1 $line;
+   if ($MakeFlag{'SHARED'} eq 'off') { print UMFILEOUT "#"; }
+   print UMFILEOUT "\t";
+   print UMFILEOUT $line;
 
-   print UMFILEOUT1 "\n";
-   print UMFILEOUT1 "# - the second rule is used NTL was built as a static library\n";
-   print UMFILEOUT1 "# - the first rule is used if NTL was built as a shared library\n";
-   print UMFILEOUT1 "# - if NTL was built as a static library, we have to include its dependencies\n";
-   print UMFILEOUT1 "# - if NTL was built as a shared library, we do not include its dependencies,\n";
-   print UMFILEOUT1 "#   as these are typically not needed; however, you can add them back\n";
-   print UMFILEOUT1 "#   if this is necessary on your system\n";
-   print UMFILEOUT1 "# - when using any shared library, you may have to take other steps\n";
-   print UMFILEOUT1 "#   to ensure your system finds the (right) library\n";
-   print UMFILEOUT1 "#   - on many systems, you may have to run something like \n";
-   print UMFILEOUT1 "#     'export LD_LIBRARY_PATH=/path/to/first/lib:/path/to/second/lib:...' \n";
-   print UMFILEOUT1 "#   - on some systems, gmp can be installed in more than one place,\n";
-   print UMFILEOUT1 "#     and even though you compiled and linked against one version,\n";
-   print UMFILEOUT1 "#     you can end up loading another version of gmp at runtime;\n";
-   print UMFILEOUT1 "#     in this case, you might need to set LD_LIBRARY_PATH to the right one\n";
+   print UMFILEOUT "\n";
+   print UMFILEOUT "# - the first rule is used NTL was built as a static library\n";
+   print UMFILEOUT "# - the second rule is used if NTL was built as a shared library\n";
+   print UMFILEOUT "# - if NTL was built as a static library, we have to include its dependencies\n";
+   print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies,\n";
+   print UMFILEOUT "#   as these are typically not needed; however, you can add them back\n";
+   print UMFILEOUT "#   if this is necessary on your system\n";
+   print UMFILEOUT "# - when using any shared library, you may have to take other steps\n";
+   print UMFILEOUT "#   to ensure your system finds the (right) library\n";
+   print UMFILEOUT "#   - on many systems, you may have to run something like \n";
+   print UMFILEOUT "#     'export LD_LIBRARY_PATH=/path/to/first/lib:/path/to/second/lib:...' \n";
+   print UMFILEOUT "#   - on some systems, gmp can be installed in more than one place,\n";
+   print UMFILEOUT "#     and even though you compiled and linked against one version,\n";
+   print UMFILEOUT "#     you can end up loading another version of gmp at runtime;\n";
+   print UMFILEOUT "#     in this case, you might need to set LD_LIBRARY_PATH to the right one\n";
 
 
-   close(UMFILEOUT1);
+   close(UMFILEOUT);
 
 
 # generate ConfigLog.txt
@@ -552,8 +529,8 @@ sub CopyFiles {
 
    system("cp mfileout makefile") and die "Error: CopyFile failed\n";
    system("cp cfileout ../include/NTL/config.h") and die "Error: CopyFile failed\n";
-   system("cp hfileout ../include/NTL/ConfigLog.txt") and die "Error: CopyFile failed\n";
-   system("cp umfileout ../include/NTL/UserMakefile.txt") and die "Error: CopyFile failed\n";
+   system("cp hfileout ../doc/ConfigLog.txt") and die "Error: CopyFile failed\n";
+   system("cp umfileout ../doc/UserMakefile.txt") and die "Error: CopyFile failed\n";
 
    return 1;
 }
@@ -947,8 +924,8 @@ print("NOCONTRACT=\"$MakeSub{'NOCONTRACT'}\"\n");
 print("\n");
 print("generated makefile\n");
 print("generated ../include/NTL/config.h\n");
-print("generated ../include/NTL/ConfigLog.txt\n");
-print("generated ../include/NTL/UserMakefile.txt\n");
+print("generated ../doc/ConfigLog.txt\n");
+print("generated ../doc/UserMakefile.txt\n");
 exit 0;
 
 
