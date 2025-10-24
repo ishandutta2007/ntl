@@ -452,9 +452,9 @@ CheckSIMDE: CheckSIMDE.cpp
 @{LSTAT}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) #LSTAT
 @{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o $@ $< libntl.la #LSHAR
 
-#### auxilliary stuff to help build user example makefile
+#### auxilliary stuff to help build USER_MAKEFILE.txt
 
-OPT_INSTALLED_RPATH=@{RPATH}-Wl,-rpath,@{LIBDIR}
+OPT_INSTALLED_RPATH=@{RPATH}@{NTLL}-Wl,-rpath,@{LIBDIR}
 INSTALLED_LIBDIR=-L@{LIBDIR} 
 
 INSTALLED_INCLUDE=-I@{INCLUDEDIR} 

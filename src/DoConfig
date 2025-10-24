@@ -324,6 +324,16 @@ if ($ConfigFlag{'NTL_SIMDE_LIB'} eq 'on') {
    }
 }
 
+# special variable to used just to generate USER_MAKEFILE.txt
+
+$MakeVal{'NTLL'} = '#';
+if (exists($Variable{'DEF_PREFIX'}) ||
+    exists($Variable{'PREFIX'}) ||
+    exists($Variable{'LIBDIR'})) {
+   $MakeVal{'NTLL'} = '';
+}
+
+
 
 
 
@@ -463,15 +473,18 @@ sub GenFiles {
    print UMFILEOUT "\t";
    print UMFILEOUT $line;
 
-   print UMFILEOUT "\n";
-   print UMFILEOUT "# - the first rule is used NTL was built as a static library\n";
+   print UMFILEOUT "\n\n";
+   print UMFILEOUT "# - the first rule is used if NTL was built as a static library\n";
    print UMFILEOUT "# - the second rule is used if NTL was built as a shared library\n";
    print UMFILEOUT "# - if NTL was built as a static library, we have to include its dependencies\n";
    print UMFILEOUT "#   - this is why you may see some -Wl,-rpath flags to ensure shared libs are found\n";
    print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies\n";
    print UMFILEOUT "#   - but you may see a -Wl,-rpath flag to ensure that the NTL lib itself is found\n";
+   print UMFILEOUT "#   - however, if NTL is installed in a standard library, this is unnecessary\n";
    print UMFILEOUT "# - instead if using these  -Wl,-rpath flags, you could instead set\n"; 
    print UMFILEOUT "#   the environment variable LD_LIBRARY_PATH\n";
+   print UMFILEOUT "# - this -Wl,-rpath and LD_LIBRARY_PATH business is needed on Linux, but not on macOS\n";
+   print UMFILEOUT "#   as the default behavior is to load the library found at link time\n";
 
    close(UMFILEOUT);
 
@@ -747,11 +760,16 @@ if (!exists($Variable{'TUNE'})) {
 
 
 # test if RPATH stuff works if using GMP or GF2X at a nonstandard location
-if ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2X'} eq '') {
+# or of we are installing at a nonstandard location and we are building a shared library
+# (this last is only needed to build USER_MAKEFILE.txt)
+# note that on macOS, we do not need to use RPATH
+if (($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on'))  && $^O ne 'darwin') {
+#if ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')) { 
    $MakeSub{'TESTRPATH'} = '-Wl,-rpath,.';
    if (!CheckCompile()) {
 
-      Warning("-Wl,-rpath not working -- it is possible that GMP or GF2X will not link correctly");
+      Warning("-Wl,-rpath not working -- it is possible that some shared libs will not link correctly");
+      # this is just a warning, as it may not be a dealbreaker if this doesn't work
    }
    else {
       print "*** using rpath\n";
