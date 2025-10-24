@@ -91,6 +91,13 @@ GMP_OPT_LIBDIR=@{GMPL}-L$(GMP_LIBDIR) # GMPL
 GMP_OPT_LIB=@{GMP}-lgmp # GMP
 # uncomment these if using GMP
 
+GMP_OPT_RPATH=@{GMPL}@{RPATH}-Wl,-rpath,$(GMP_LIBDIR)
+# uncomment this if using GMP 
+
+GMP_OPT_LIBPATH=$(GMP_OPT_LIBDIR) $(GMP_OPT_RPATH)
+# used when linking to GMP without libtool
+# this ensures that we link to the right version of a shared GMP library
+
 
 
 ###############################################################
@@ -115,6 +122,17 @@ GF2X_OPT_INCDIR=@{GF2XI}-I$(GF2X_INCDIR) # GF2X
 GF2X_OPT_LIBDIR=@{GF2XL}-L$(GF2X_LIBDIR) # GF2X
 GF2X_OPT_LIB=@{GF2X}-lgf2x # GF2X
 # uncomment these if using gf2x
+
+GF2X_OPT_RPATH=@{GF2XL}@{RPATH}-Wl,-rpath,$(GF2X_LIBDIR)
+# uncomment this if using gf2x
+
+GF2X_OPT_LIBPATH=$(GF2X_OPT_LIBDIR) $(GF2X_OPT_RPATH)
+# used when linking to gf2x without libtool
+# this ensures that we link to the right version of a shared gf2x library
+
+
+
+
 
 ###############################################################
 #
@@ -372,9 +390,9 @@ setup2:
 # This also checks that the right version of gf2x library.
 
 setup3:
-	$(LINK) $(GMP_OPT_INCDIR) -o gen_gmp_aux gen_gmp_aux.cpp $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) $(GMP_OPT_INCDIR) -o gen_gmp_aux gen_gmp_aux.cpp $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 	./gen_gmp_aux > ../include/NTL/gmp_aux.h 
-	$(LINK) $(GF2X_OPT_INCDIR) -o gf2x_version_1_2_or_later_required gf2x_version_1_2_or_later_required.cpp $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) 
+	$(LINK) $(GF2X_OPT_INCDIR) -o gf2x_version_1_2_or_later_required gf2x_version_1_2_or_later_required.cpp $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) 
 
 # setup4 runs the wizard
 
@@ -406,8 +424,9 @@ quad_float.o:	quad_float.cpp
 pd_FFT.o: pd_FFT.cpp
 	$(LCOMP) $(COMPILE) $(NOCONTRACT) pd_FFT.cpp
 
+TESTRPATH=@{TESTRPATH}
 CheckCompile: CheckCompile.cpp
-	$(LINK) -o  CheckCompile CheckCompile.cpp $(LDLIBS)
+	$(LINK) -o  CheckCompile CheckCompile.cpp $(TESTRPATH) $(LDLIBS) 
 
 GenConfigInfo: GenConfigInfo.cpp
 	$(LINK) -o  GenConfigInfo GenConfigInfo.cpp $(LDLIBS)
@@ -419,7 +438,7 @@ CheckThreads: CheckThreads.cpp
 	$(LINK) -o  CheckThreads CheckThreads.cpp $(LDLIBS)
 
 CheckGMP: CheckGMP.cpp
-	$(LINK) $(GMP_OPT_INCDIR) -o  CheckGMP CheckGMP.cpp $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) $(GMP_OPT_INCDIR) -o  CheckGMP CheckGMP.cpp $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 
 CheckSIMDE: CheckSIMDE.cpp
 	$(LINK) $(SIMDE_OPT_INCDIR) -o  CheckSIMDE CheckSIMDE.cpp $(LDLIBS)
@@ -430,7 +449,7 @@ CheckSIMDE: CheckSIMDE.cpp
 	$(LCOMP) $(COMPILE) $<
 
 .cpp: 
-@{LSTAT}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) #LSTAT
+@{LSTAT}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) #LSTAT
 @{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o $@ $< libntl.la #LSHAR
 
 #### auxilliary stuff to help build user example makefile
@@ -442,7 +461,7 @@ INSTALLED_INCLUDE=-I@{INCLUDEDIR}
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
 
 static_command:
-	echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIB) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS)'
+	echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIB) $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)'
 
 shared_command:
 	echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIB)'
@@ -616,15 +635,15 @@ wntl.a:	$(WOBJ)
 
 
 Poly1TimeTest:
-	$(LINK) -o Poly1TimeTest Poly1TimeTest.cpp wntl.a  $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) -o Poly1TimeTest Poly1TimeTest.cpp wntl.a  $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 Poly2TimeTest:
-	$(LINK) -o Poly2TimeTest Poly2TimeTest.cpp wntl.a  $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) -o Poly2TimeTest Poly2TimeTest.cpp wntl.a  $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 Poly3TimeTest:
-	$(LINK) -o Poly3TimeTest Poly3TimeTest.cpp wntl.a  $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) -o Poly3TimeTest Poly3TimeTest.cpp wntl.a  $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 
 
 GF2XTimeTest:
-	$(LINK) -o GF2XTimeTest GF2XTimeTest.cpp wntl.a  $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(LDLIBS)
+	$(LINK) -o GF2XTimeTest GF2XTimeTest.cpp wntl.a  $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
 
 InitSettings:
 	$(LINK) -o InitSettings InitSettings.cpp  $(LDLIBS)

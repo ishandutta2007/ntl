@@ -613,6 +613,14 @@ elsif ($min_std) {
    $ConfigSub{'NTL_STD_CXX11'} = 1;
 }
 
+# set initial value for RPATH related stuff
+# this is all just to make sure we link to the right versions
+# of GMP during the build process
+$MakeSub{'TESTRPATH'} = '';  # empty except when checking lW,-rpath,. arg
+$MakeSub{'RPATH'} = '#'; # empty when rpath enabled 
+
+
+
 
 sub Process_TUNE {
    # special processing for TUNE --- WIZARD gets set here as well
@@ -683,7 +691,7 @@ Process_TUNE();
 
 
 
-#########################################
+# By this point, all of the MakeSub variables need to be defined
 
 if ($nowrite) {
    GenFiles();
@@ -746,6 +754,24 @@ if (!exists($Variable{'TUNE'})) {
    }
 }
 
+
+# test if RPATH stuff works if using GMP or GF2X at a nonstandard location
+if ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2X'} eq '') {
+   $MakeSub{'TESTRPATH'} = '-Wl,-rpath,.';
+   if (!CheckCompile()) {
+
+      Warning("-Wl,-rpath not working -- it is possible that GMP or GF2X will not link correctly");
+   }
+   else {
+      print "*** using rpath\n";
+      $MakeSub{'RPATH'} = ''; # this will enable RPATH in the makefile
+   }
+   $MakeSub{'TESTRPATH'} = '';
+}
+else {
+   print "*** rpath not needed\n";
+}
+      
 
 #logic to set CXXAUTOFLAGS
 
