@@ -420,8 +420,6 @@ sub GenFiles {
    close(MFILE);
    close(MFILEOUT);
 
-   
-   
    # generate config.h
    
    
@@ -439,7 +437,7 @@ sub GenFiles {
    close(CFILE);
    close(CFILEOUT);
 
-# generate UserMakefile.txt
+# generate USER_MAKEFILE.txt
    
 
 
@@ -456,11 +454,11 @@ sub GenFiles {
    print UMFILEOUT "\n\n";
 
    print UMFILEOUT ".cpp:\n";
-   $line = `$MakeVal{'MAKE_PROG'} -f mfileout -s static_command`;
+   $line = `$MakeVal{'MAKE_PROG'} -f mfileout static_command`;
    if ($MakeFlag{'SHARED'} eq 'on') { print UMFILEOUT "#"; }
    print UMFILEOUT "\t";
    print UMFILEOUT $line;
-   $line = `$MakeVal{'MAKE_PROG'} -f mfileout -s shared_command`;
+   $line = `$MakeVal{'MAKE_PROG'} -f mfileout shared_command`;
    if ($MakeFlag{'SHARED'} eq 'off') { print UMFILEOUT "#"; }
    print UMFILEOUT "\t";
    print UMFILEOUT $line;
@@ -469,23 +467,16 @@ sub GenFiles {
    print UMFILEOUT "# - the first rule is used NTL was built as a static library\n";
    print UMFILEOUT "# - the second rule is used if NTL was built as a shared library\n";
    print UMFILEOUT "# - if NTL was built as a static library, we have to include its dependencies\n";
-   print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies,\n";
-   print UMFILEOUT "#   as these are typically not needed; however, you can add them back\n";
-   print UMFILEOUT "#   if this is necessary on your system\n";
-   print UMFILEOUT "# - when using any shared library, you may have to take other steps\n";
-   print UMFILEOUT "#   to ensure your system finds the (right) library\n";
-   print UMFILEOUT "#   - on many systems, you may have to run something like \n";
-   print UMFILEOUT "#     'export LD_LIBRARY_PATH=/path/to/first/lib:/path/to/second/lib:...' \n";
-   print UMFILEOUT "#   - on some systems, gmp can be installed in more than one place,\n";
-   print UMFILEOUT "#     and even though you compiled and linked against one version,\n";
-   print UMFILEOUT "#     you can end up loading another version of gmp at runtime;\n";
-   print UMFILEOUT "#     in this case, you might need to set LD_LIBRARY_PATH to the right one\n";
-
+   print UMFILEOUT "#   - this is why you may see some -Wl,-rpath flags to ensure shared libs are found\n";
+   print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies\n";
+   print UMFILEOUT "#   - but you may see a -Wl,-rpath flag to ensure that the NTL lib itself is found\n";
+   print UMFILEOUT "# - instead if using these  -Wl,-rpath flags, you could instead set\n"; 
+   print UMFILEOUT "#   the environment variable LD_LIBRARY_PATH\n";
 
    close(UMFILEOUT);
 
 
-# generate ConfigLog.txt
+# generate CONFIG_LOG.txt
 
    open(HFILEOUT, "> hfileout");
    $argstr = join(' ', @ARGV);
@@ -528,8 +519,8 @@ sub CopyFiles {
 
    system("cp mfileout makefile") and die "Error: CopyFile failed\n";
    system("cp cfileout ../include/NTL/config.h") and die "Error: CopyFile failed\n";
-   system("cp hfileout ../doc/ConfigLog.txt") and die "Error: CopyFile failed\n";
-   system("cp umfileout ../doc/UserMakefile.txt") and die "Error: CopyFile failed\n";
+   system("cp hfileout ../include/NTL/CONFIG_LOG.txt") and die "Error: CopyFile failed\n";
+   system("cp umfileout ../include/NTL/USER_MAKEFILE.txt") and die "Error: CopyFile failed\n";
 
    return 1;
 }
@@ -949,8 +940,8 @@ print("NOCONTRACT=\"$MakeSub{'NOCONTRACT'}\"\n");
 print("\n");
 print("generated makefile\n");
 print("generated ../include/NTL/config.h\n");
-print("generated ../doc/ConfigLog.txt\n");
-print("generated ../doc/UserMakefile.txt\n");
+print("generated ../include/NTL/CONFIG_LOG.txt\n");
+print("generated ../include/NTL/USER_MAKEFILE.txt\n");
 exit 0;
 
 

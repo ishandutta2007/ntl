@@ -454,17 +454,18 @@ CheckSIMDE: CheckSIMDE.cpp
 
 #### auxilliary stuff to help build user example makefile
 
-INSTALLED_LIB=-L@{LIBDIR} -lntl 
+OPT_INSTALLED_RPATH=@{RPATH}-Wl,-rpath,@{LIBDIR}
+INSTALLED_LIBDIR=-L@{LIBDIR} 
 
 INSTALLED_INCLUDE=-I@{INCLUDEDIR} 
 
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
 
 static_command:
-	echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIB) $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)'
+	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)'
 
 shared_command:
-	echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIB)'
+	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) $(OPT_INSTALLED_RPATH) -lntl'
 
 
 #################################################################
@@ -502,6 +503,7 @@ install:
 	rm -rf $(DESTDIR)$(INCLUDEDIR)/NTL
 	mkdir -m 755 $(DESTDIR)$(INCLUDEDIR)/NTL
 	cp -p ../include/NTL/*.h $(DESTDIR)$(INCLUDEDIR)/NTL
+	cp -p ../include/NTL/*.txt $(DESTDIR)$(INCLUDEDIR)/NTL
 	- chmod -R a+r $(DESTDIR)$(INCLUDEDIR)/NTL
 	mkdir -p -m 755 $(DESTDIR)$(DOCDIR)
 	rm -rf $(DESTDIR)$(DOCDIR)/NTL
@@ -514,16 +516,16 @@ install:
 @{LSTAT}	cp -p ntl.a $(DESTDIR)$(LIBDIR)/libntl.a #LSTAT
 @{LSTAT}	- chmod a+r $(DESTDIR)$(LIBDIR)/libntl.a #LSTAT
 @{LSHAR}	$(LIBTOOL) --mode=install cp -p libntl.la $(DESTDIR)$(LIBDIR) #LSHAR
-	- $(MAKE) -s install_summary
+	- $(MAKE) install_summary
 
 install_summary:
-	echo 
-	echo '*** SUMMARY ***'
-	echo '* include files installed to $(DESTDIR)$(INCLUDEDIR)/NTL'
-	echo '* library files installed to $(DESTDIR)$(LIBDIR)'
-	echo '* doc files installed to $(DESTDIR)$(DOCDIR)/NTL'
-	echo '** see $(DESTDIR)$(DOCDIR)/NTL/ConfigLog.txt for a summary of the configuration'
-	echo '** see $(DESTDIR)$(DOCDIR)/NTL/UserMakefile.txt for an example makefile to build user programs'
+	@echo 
+	@echo '*** SUMMARY ***'
+	@echo '* include files installed to $(DESTDIR)$(INCLUDEDIR)/NTL'
+	@echo '* library files installed to $(DESTDIR)$(LIBDIR)'
+	@echo '* doc files installed to $(DESTDIR)$(DOCDIR)/NTL'
+	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/CONFIG_LOG.txt for a summary of the configuration'
+	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/USER_MAKEFILE.txt for an example makefile to build user programs'
 
 uninstall:
 @{LSTAT}	rm -f $(LIBDIR)/libntl.a #LSTAT

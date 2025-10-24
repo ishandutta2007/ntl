@@ -15,3 +15,42 @@ For a detailed guide to installation, please see the appropriate documentation:
    * doc/tour-win.html for Windows systems
 
 The latest version of NTL is available at http://www.shoup.net.
+
+---------------------------------
+QUICK START GUIDE FOR UNIX
+---------------------------------
+
+In the src directory, you can use the basic pattern of 
+   ./configure
+   make 
+   make install
+However, NTL's configure script does not follow the normal autotools syntax. 
+See doc/config.txt for all the options.
+
+The most common and important options:
+
+   GMP_PREFIX=/path/to/gmp/installation  
+   - this defaults to /usr/local, but you need to change it if GMP
+     is installed somewhere else
+   - note that for best performannce, you may want to build GMP from source,
+     rather than rely on a system installation (which is often not tuned
+     to your particular machine)
+
+   PREFIX=/path/to/ntl/installation
+   - this also defaults to /usr/local, but you need to change it if you
+     want to install NTL somewhere else
+   
+   SHARED=on
+   - this defaults to "off", but you should set it to "on" if you want
+     to build NTL as a shared (dynamic) library
+
+After running the configure script, the files CONFIG_LOG.txt and
+USER_MAKEFILE.txt are written to the include/NTL directory.
+CONFIG_LOG.txt summarizes the configuration options used to build NTL.
+USER_MAKEFILE.txt is a simple example makefie that users can use
+to compile their programs using the installed library.
+
+Before running make install, you should probably run
+   make check
+to make sure everything works. This can take a few minutes.
+    
