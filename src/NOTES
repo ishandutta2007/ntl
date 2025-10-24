@@ -7,6 +7,7 @@ Changes:
 - added USER_MAKEFILE.txt
 - changed ConfigLog.h to CONFIG_LOG.txt
 - added a quick start guide in README
+- added some -Wl,-rpath trickery to make sure we link to the right shared libs
 
 documentation:
  - ../doc/config.txt
