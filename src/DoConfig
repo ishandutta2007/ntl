@@ -208,7 +208,7 @@ if ($MakeVal{'CXXFLAGS'} =~ '-march=|-mcpu=|-mtune=') {
 if ($MakeFlag{'SHARED'} eq 'off') {
 
    $MakeVal{'LSTAT'} = '';
-   $MakeVal{'LSHAR'} = '# ';
+   $MakeVal{'LSHAR'} = '#';
 
    if (!defined($MakeVal{'LIBTOOL'})) {
       $MakeVal{'LIBTOOL'} = 'libtool';
@@ -220,7 +220,7 @@ if ($MakeFlag{'SHARED'} eq 'off') {
 
 } else {
 
-   $MakeVal{'LSTAT'} = '# ';
+   $MakeVal{'LSTAT'} = '#';
    $MakeVal{'LSHAR'} = '';
 
    if (!defined($MakeVal{'LIBTOOL'})) {
@@ -270,9 +270,9 @@ if ($MakeFlag{'SHARED'} eq 'off') {
 
 # special GMP variables
 
-$MakeVal{'GMPI'} = '# ';
-$MakeVal{'GMPL'} = '# ';
-$MakeVal{'GMP'} =  '# ';
+$MakeVal{'GMPI'} = '#';
+$MakeVal{'GMPL'} = '#';
+$MakeVal{'GMP'} =  '#';
 
 if ($ConfigFlag{'NTL_GMP_LIP'} eq 'on') {
    $MakeVal{'GMP'} = '';
@@ -291,9 +291,9 @@ if ($ConfigFlag{'NTL_GMP_LIP'} eq 'on') {
 # special GF2X variables
 
 
-$MakeVal{'GF2XI'} = '# ';
-$MakeVal{'GF2XL'} = '# ';
-$MakeVal{'GF2X'} =  '# ';
+$MakeVal{'GF2XI'} = '#';
+$MakeVal{'GF2XL'} = '#';
+$MakeVal{'GF2X'} =  '#';
 
 
 if ($ConfigFlag{'NTL_GF2X_LIB'} eq 'on') {
@@ -313,7 +313,7 @@ if ($ConfigFlag{'NTL_GF2X_LIB'} eq 'on') {
 # special SIMDE variables
 
 
-$MakeVal{'SIMDEI'} = '# ';
+$MakeVal{'SIMDEI'} = '#';
 
 
 if ($ConfigFlag{'NTL_SIMDE_LIB'} eq 'on') {
