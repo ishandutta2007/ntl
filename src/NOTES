@@ -14,7 +14,12 @@ documentation:
  - ../doc/tour-unix.html
 
 TODO:
+ - add SYS_PREFIX config option (can change /usr/local without
+   forcing explicit -L/-I/rpath, DEF_PREFIX inherits from this)
+ - enhance little endian test to include simde lanes:
+      pack 32-bit ints into 128-bit
  - take config.h out of INCL (should not go in tarball)
+  
 
 Sppedups:
 Mat<ZZ_p> n=1000, k=1000, 6.05219 vs 12.8913
