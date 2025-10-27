@@ -9,6 +9,12 @@ Changes:
 - added a quick start guide in README
 - added some -Wl,-rpath trickery to make sure we link to the right shared libs
 
+- updates to doc files: make sure to update doc/* on the web page 
+
+- The header file ZZ_limbs.h creates an include dependency
+  for <gmp.h> which otherwise doesn't exist. This creates
+  an issue for packaging.
+
 documentation:
  - ../doc/config.txt
  - ../doc/tour-unix.html
