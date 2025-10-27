@@ -454,18 +454,43 @@ CheckSIMDE: CheckSIMDE.cpp
 
 #### auxilliary stuff to help build USER_MAKEFILE.txt
 
-INSTALLED_RPATH=@{RPATH}@{NTLL}-Wl,-rpath,@{LIBDIR}
-INSTALLED_LIBDIR=@{NTLL}-L@{LIBDIR} 
+INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
+INSTALLED_RPATH=@{LSHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
+INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
 
-INSTALLED_INCLUDE=@{NTLI}-I@{INCLUDEDIR} 
+INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR) 
 
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
 
 static_command:
-	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)'
+	@printf '.cpp:\n'
+	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+	@printf '# $$@ matches "foo" when run as "make foo"\n'
+	@printf '# $$< matches "foo.cpp" when run as "make foo"\n'
+	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf '# "-pthread" enables multi-threading\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-march=native'*) printf '# "-march=native" targets compilation to the native instruction set\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-mcpu=native'*) printf '# "-mcpu=native" targets compilation to the native instruction set\n#    (preferred over -march=native for arm platforms)\n' ;; esac
+	@printf '# "-lntl" ensures that program will link to ntl\n'
+@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at linktime\n'
+@{GMPL}	@printf '# "-lgmp" ensures that program will link to gmp\n' 
+@{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at linktime\n' 
+@{GMPL}@{RPATH}	@printf '# "-Wl,-rpath,$(GMP_LIBDIR)" ensures gmp if found at runtime\n#    (if it is a shared lib)\n' 
+@{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
+@{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at linktime\n' 
+@{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x if found at runtime\n#    (if it is a shared lib)\n' 
+
 
 shared_command:
-	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) $(INSTALLED_RPATH) -lntl'
+	@printf '.cpp:\n'
+	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
+	@printf '# $$@ matches "foo" when run as "make foo"\n'
+	@printf '# $$< matches "foo.cpp" when run as "make foo"\n'
+	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf '# "-pthread" enables multi-threading\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-march=native'*) printf '# "-march=native" targets compilation to the native instruction set\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-mcpu=native'*) printf '# "-mcpu=native" targets compilation to the native instruction set\n#    (preferred over -march=native for arm platforms)\n' ;; esac
+	@printf '# "-lntl" ensures that program will link to ntl\n'
+@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at linktime\n'
+@{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n' 
 
 
 #################################################################

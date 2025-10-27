@@ -469,28 +469,35 @@ sub GenFiles {
    print UMFILEOUT "# You can adapt this to the needs of your project as necessary.\n";
    print UMFILEOUT "\n\n";
 
-   print UMFILEOUT ".cpp:\n";
-   $line = `$MakeVal{'MAKE_PROG'} -f mfileout static_command`;
-   if ($MakeFlag{'SHARED'} eq 'on') { print UMFILEOUT "#"; }
-   print UMFILEOUT "\t";
-   print UMFILEOUT $line;
-   $line = `$MakeVal{'MAKE_PROG'} -f mfileout shared_command`;
-   if ($MakeFlag{'SHARED'} eq 'off') { print UMFILEOUT "#"; }
-   print UMFILEOUT "\t";
-   print UMFILEOUT $line;
+   if ($MakeFlag{'SHARED'} eq 'on') {
+      print UMFILEOUT `$MakeVal{'MAKE_PROG'} -f mfileout shared_command`;
+   }
+   else {
+      print UMFILEOUT `$MakeVal{'MAKE_PROG'} -f mfileout static_command`;
+   }
 
-   print UMFILEOUT "\n\n";
-   print UMFILEOUT "# - the first rule is used if NTL was built as a static library\n";
-   print UMFILEOUT "# - the second rule is used if NTL was built as a shared library\n";
-   print UMFILEOUT "# - if NTL was built as a static library, we have to include its dependencies\n";
-   print UMFILEOUT "#   - this is why you may see some -Wl,-rpath flags to ensure shared libs are found\n";
-   print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies\n";
-   print UMFILEOUT "#   - but you may see a -Wl,-rpath flag to ensure that the NTL lib itself is found\n";
-   print UMFILEOUT "#   - however, if NTL is installed in a standard library, this is unnecessary\n";
-   print UMFILEOUT "# - instead if using these  -Wl,-rpath flags, you could instead set\n"; 
-   print UMFILEOUT "#   the environment variable LD_LIBRARY_PATH\n";
-   print UMFILEOUT "# - this -Wl,-rpath and LD_LIBRARY_PATH business is needed on Linux, but not on macOS\n";
-   print UMFILEOUT "#   as the default behavior is to load the library found at link time\n";
+#   print UMFILEOUT ".cpp:\n";
+#   $line = `$MakeVal{'MAKE_PROG'} -f mfileout static_command`;
+#   if ($MakeFlag{'SHARED'} eq 'on') { print UMFILEOUT "#"; }
+#   print UMFILEOUT "\t";
+#   print UMFILEOUT $line;
+#   $line = `$MakeVal{'MAKE_PROG'} -f mfileout shared_command`;
+#   if ($MakeFlag{'SHARED'} eq 'off') { print UMFILEOUT "#"; }
+#   print UMFILEOUT "\t";
+#   print UMFILEOUT $line;
+#
+#   print UMFILEOUT "\n\n";
+#   print UMFILEOUT "# - the first rule is used if NTL was built as a static library\n";
+#   print UMFILEOUT "# - the second rule is used if NTL was built as a shared library\n";
+#   print UMFILEOUT "# - if NTL was built as a static library, we have to include its dependencies\n";
+#   print UMFILEOUT "#   - this is why you may see some -Wl,-rpath flags to ensure shared libs are found\n";
+#   print UMFILEOUT "# - if NTL was built as a shared library, we do not include its dependencies\n";
+#   print UMFILEOUT "#   - but you may see a -Wl,-rpath flag to ensure that the NTL lib itself is found\n";
+#   print UMFILEOUT "#   - however, if NTL is installed in a standard library, this is unnecessary\n";
+#   print UMFILEOUT "# - instead if using these  -Wl,-rpath flags, you could instead set\n"; 
+#   print UMFILEOUT "#   the environment variable LD_LIBRARY_PATH\n";
+#   print UMFILEOUT "# - this -Wl,-rpath and LD_LIBRARY_PATH business is needed on Linux, but not on macOS\n";
+#   print UMFILEOUT "#   as the default behavior is to load the library found at link time\n";
 
    close(UMFILEOUT);
 
