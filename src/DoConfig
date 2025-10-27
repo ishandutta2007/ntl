@@ -333,6 +333,12 @@ if (exists($Variable{'DEF_PREFIX'}) ||
    $MakeVal{'NTLL'} = '';
 }
 
+$MakeVal{'NTLI'} = '#';
+if (exists($Variable{'DEF_PREFIX'}) ||
+    exists($Variable{'PREFIX'}) ||
+    exists($Variable{'INCLUDEDIR'})) {
+   $MakeVal{'NTLI'} = '';
+}
 
 
 

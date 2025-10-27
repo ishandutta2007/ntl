@@ -404,7 +404,7 @@ setup4:
 ntl.a:	$(OBJ) 
 @{LSTAT}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #LSTAT
 @{LSTAT}	- $(RANLIB) ntl.a #LSTAT
-@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) -version-info `cat VERSION_INFO` #LSHAR
+@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -version-info `cat VERSION_INFO` #LSHAR
 
 @{LSTAT}LCOMP= #LSTAT
 @{LSHAR}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LSHAR
@@ -454,10 +454,10 @@ CheckSIMDE: CheckSIMDE.cpp
 
 #### auxilliary stuff to help build USER_MAKEFILE.txt
 
-OPT_INSTALLED_RPATH=@{RPATH}@{NTLL}-Wl,-rpath,@{LIBDIR}
-INSTALLED_LIBDIR=-L@{LIBDIR} 
+INSTALLED_RPATH=@{RPATH}@{NTLL}-Wl,-rpath,@{LIBDIR}
+INSTALLED_LIBDIR@{NTLL}=-L@{LIBDIR} 
 
-INSTALLED_INCLUDE=-I@{INCLUDEDIR} 
+INSTALLED_INCLUDE=@{NTLI}-I@{INCLUDEDIR} 
 
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
 
@@ -465,7 +465,7 @@ static_command:
 	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)'
 
 shared_command:
-	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) $(OPT_INSTALLED_RPATH) -lntl'
+	@echo '$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) $(INSTALLED_RPATH) -lntl'
 
 
 #################################################################
