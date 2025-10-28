@@ -462,20 +462,29 @@ INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR)
 
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
 
-static_command:
-	@printf '.cpp:\n'
-	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+common_command:
 	@printf '\n'
 	@printf '# ntl was installed as a static library with dependencies:'
 @{GMP}	@printf ' gmp'
 @{GF2X}	@printf ' gf2x'
 	@printf '\n\n'
 @{NTLI}	@printf '# "-I$(INCLUDEDIR)" ensures ntl header files found at compile time\n'
+	@case '$(CXXFLAGS)' in *' -g '*|'-g '*|*' -g'|'-g') printf '# "-g" enables the debugger\n' ;; esac
+	@case '$(CXXFLAGS)' in *'-O2'*) printf '# "-O2" enables (level 2) optimization\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-std=c++11'*) printf '# "-std=c++11" enables the C++11 standard\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-std=c++14'*) printf '# "-std=c++14" enables the C++14 standard\n' ;; esac
 	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf '# "-pthread" enables multi-threading\n' ;; esac
 	@case '$(CXXAUTOFLAGS)' in *'-march=native'*) printf '# "-march=native" targets compilation to the native instruction set\n' ;; esac
 	@case '$(CXXAUTOFLAGS)' in *'-mcpu=native'*) printf '# "-mcpu=native" targets compilation to the native instruction set\n#    (preferred over -march=native for arm platforms)\n' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-fp-model precise'*) printf '# "-fp-model precise" needed in icc compiler to keep floating point accurate\n' ;; esac
 	@printf '# "$$@" expands to "foo" when run as "make foo"\n'
 	@printf '# "$$<" expands to "foo.cpp" when run as "make foo"\n'
+
+
+static_command:
+	@printf '.cpp:\n'
+	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+	@$(MAKE) common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 	@printf '# "-lntl" ensures that program will link to ntl\n'
 @{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
@@ -489,20 +498,10 @@ static_command:
 shared_command:
 	@printf '.cpp:\n'
 	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
-	@printf '\n'
-	@printf '# ntl was installed as a static library with dependencies:'
-@{GMP}	@printf ' gmp'
-@{GF2X}	@printf ' gf2x'
-	@printf '\n\n'
-@{NTLI}	@printf '# "-I$(INCLUDEDIR)" ensures ntl header files found at compile time\n'
-	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf '# "-pthread" enables multi-threading\n' ;; esac
-	@case '$(CXXAUTOFLAGS)' in *'-march=native'*) printf '# "-march=native" targets compilation to the native instruction set\n' ;; esac
-	@case '$(CXXAUTOFLAGS)' in *'-mcpu=native'*) printf '# "-mcpu=native" targets compilation to the native instruction set\n#    (preferred over -march=native for arm platforms)\n' ;; esac
-	@printf '# "$$@" expands to "foo" when run as "make foo"\n'
-	@printf '# "$$<" expands to "foo.cpp" when run as "make foo"\n'
+	@$(MAKE) common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
-	@printf '# "-lntl" ensures that program will link to ntl\n'
 @{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n' 
+	@printf '# "-lntl" ensures that program will link to ntl\n'
 
 
 #################################################################
