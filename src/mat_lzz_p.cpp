@@ -9,7 +9,7 @@
 
 #ifdef NTL_HAVE_AVX
 
-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
+#if (defined(__x86_64__))
 #include <immintrin.h>
 #elif (defined(NTL_SIMDE_LIB))
 #define SIMDE_ENABLE_NATIVE_ALIASES
@@ -27,7 +27,7 @@
 #error "configuration error"
 #endif
 
-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
+#if (defined(__x86_64__))
 
 // native FMA
 

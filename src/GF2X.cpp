@@ -16,7 +16,7 @@
 
 #define NTL_INLINE inline
 
-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
+#if (defined(__x86_64__))
 
 #include <wmmintrin.h>
 
