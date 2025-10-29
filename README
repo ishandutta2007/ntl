@@ -27,6 +27,10 @@ In the src directory, you can use the basic pattern of
 However, NTL's configure script does not follow the normal autotools syntax. 
 See doc/config.txt for all the options.
 
+Before running make install, you should probably run
+   make check
+to make sure everything works. This can take a few minutes.
+
 The most common and important options:
 
    GMP_PREFIX=/path/to/gmp/installation  
@@ -50,7 +54,14 @@ CONFIG_LOG.txt summarizes the configuration options used to build NTL.
 USER_MAKEFILE.txt is a simple example makefie that users can use
 to compile their programs using the installed library.
 
-Before running make install, you should probably run
-   make check
-to make sure everything works. This can take a few minutes.
+After installing NTL, you can copy USER_MAKEFILE.txt from
+PREFIX/include/NTL/USER_MAKEFILE.txt to "makefile" in your current working
+directory. 
+Then you can compile the program "foo.cpp" into the exceutable "foo"
+by executing "make foo". 
+
+After installing NTL, the documentation is written to PREFIX/doc.
+You can open PREFIX/doc/tour.html to get the main page of the documentation.
+
+
     
