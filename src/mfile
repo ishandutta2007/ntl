@@ -482,6 +482,8 @@ INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFL
 static_command:
 	@printf '.cpp:\n'
 	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+	@printf '\n'
+	@printf '# ntl was installed as a static library with dependencies:'
 	@$(MAKE) common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 	@printf '# "-lntl" ensures that program will link to ntl\n'
@@ -496,14 +498,14 @@ static_command:
 shared_command:
 	@printf '.cpp:\n'
 	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
+	@printf '\n'
+	@printf '# ntl was installed as a shared library with dependencies:'
 	@$(MAKE) common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 @{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
 	@printf '# "-lntl" ensures that program will link to ntl\n'
 
 common_command:
-	@printf '\n'
-	@printf '# ntl was installed as a static library with dependencies:'
 @{GMP}	@printf ' gmp'
 @{GF2X}	@printf ' gf2x'
 	@printf '\n\n'
