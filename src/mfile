@@ -401,10 +401,13 @@ setup4:
 
 #### commands to build things
 
+@{LIBTOOL_LINK_AS_STATIC}LIBTOOL_LINK_AS=-static
+@{LIBTOOL_LINK_AS_SHARED}LIBTOOL_LINK_AS=-version-info `cat VERSION_INFO`
+
 ntl.a:	$(OBJ) 
 @{LSTAT}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #LSTAT
 @{LSTAT}	- $(RANLIB) ntl.a #LSTAT
-@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) -version-info `cat VERSION_INFO` #LSHAR
+@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) $(LIBTOOL_LINK_AS) #LSHAR
 
 @{LSTAT}LCOMP= #LSTAT
 @{LSHAR}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LSHAR
@@ -466,7 +469,9 @@ user_makefile:
 	@printf "# You can adapt this to the needs of your own project as necessary.\n"
 	@printf "\n\n";
 @{LSTAT}	@$(MAKE) static_command 
-@{LSHAR}	@$(MAKE) shared_command 
+@{LSHAR}@{LIBTOOL_LINK_AS_SHARED}	@$(MAKE) shared_command 
+@{LSHAR}@{LIBTOOL_LINK_AS_STATIC}	@$(MAKE) static_command 
+
 
 
 INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
@@ -493,6 +498,12 @@ static_command:
 @{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
 @{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GF2X_LIBDIR) to LD_LIBRARY_PATH\n' 
 @{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
+@{LSHAR}	@printf '\n# ntl was installed using libtool\n'
+@{LSHAR}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
+@{LSHAR}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
+@{LSHAR}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
+@{LSHAR}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
+
 
 
 shared_command:
@@ -504,6 +515,14 @@ shared_command:
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 @{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
 	@printf '# "-lntl" ensures that program will link to ntl\n'
+@{RPATH}@{LSHAR}	@printf '\n# ntl was installed using libtool\n'
+@{RPATH}@{LSHAR}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
+@{RPATH}@{LSHAR}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
+@{RPATH}@{LSHAR}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
+@{RPATH}@{LSHAR}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
+
+
+
 
 common_command:
 @{GMP}	@printf ' gmp'

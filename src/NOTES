@@ -24,6 +24,14 @@ TODO:
    forcing explicit -L/-I/rpath, DEF_PREFIX inherits from this)
  - take config.h out of INCL (should not go in tarball)
 
+MAYBE:
+- maybe add a flag ENABLE_RPATH (default =on)
+- maybe add a flag ENABLE_LIBTOOL (default =off)
+  - we would use libtool even when building static
+  - we would craete a user makefile that uses libtool 
+
+ 
+
 
   
 
