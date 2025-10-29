@@ -37,6 +37,17 @@
 
 using namespace std;
 
+
+// sanity check: we require little endianness for general
+// compatability of memory layout (only needed when using SIMDE).
+// this means little endian by lane and by byte within a lane.
+int little_endian()
+{
+   __m128i v = _mm_set_epi32(_ntl_nofold(0), _ntl_nofold(0), _ntl_nofold(0), _ntl_nofold(1));
+   return ((char*)&v)[0] == 1;
+}
+
+
 void fun(double * x, const double *a, const double *b)
 {
    __m256d xvec, avec, bvec, cvec;
@@ -75,13 +86,7 @@ int main()
 
    fun(x, a, b);
 
-// sanity check: we require little endianness for general
-// compatability of memory layout (only needed when using SIMDE)
-
-   int test_var = _ntl_nofold(1);
-   char *test_little_endian = (char*)&test_var;
-   if (!test_little_endian[0]) return -1;
-
+   if (!little_endian()) return -1;
 
    if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26)
       return 0;

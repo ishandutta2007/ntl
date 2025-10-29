@@ -455,30 +455,7 @@ sub GenFiles {
 
 # generate USER_MAKEFILE.txt
    
-
-
-   open(UMFILEOUT, "> umfileout");
-   print UMFILEOUT "# This is a sample makefile that can be used to compile programs using \n";
-   print UMFILEOUT "# an installed version of NTL.\n";
-   print UMFILEOUT "# Using this ensures that your programs compile with  flags consistent\n";
-   print UMFILEOUT "# with the build, and link to the right libraries.\n";
-   print UMFILEOUT "#\n";
-   print UMFILEOUT "# The basic functionality provided by this makefile is to allow\n";
-   print UMFILEOUT "# you to compile 'foo.cpp' into the executable file 'foo' by executing\n";
-   print UMFILEOUT "#    make foo   \n";
-   print UMFILEOUT "# You can adapt this to the needs of your own project as necessary.\n";
-   print UMFILEOUT "\n\n";
-
-   if ($MakeFlag{'SHARED'} eq 'on') {
-      print UMFILEOUT `$MakeVal{'MAKE_PROG'} -f mfileout shared_command`;
-   }
-   else {
-      print UMFILEOUT `$MakeVal{'MAKE_PROG'} -f mfileout static_command`;
-   }
-
-
-   close(UMFILEOUT);
-
+   system("$MakeVal{'MAKE_PROG'} -f mfileout user_makefile > umfileout");
 
 # generate CONFIG_LOG.txt
 

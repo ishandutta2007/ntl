@@ -454,6 +454,21 @@ CheckSIMDE: CheckSIMDE.cpp
 
 #### auxilliary stuff to help build USER_MAKEFILE.txt
 
+user_makefile:
+	@printf "# This is a sample makefile that can be used to compile programs using \n"
+	@printf "# an installed version of NTL.\n"
+	@printf "# Using this ensures that your programs compile with flags consistent\n"
+	@printf "# with the build, and link to the right libraries.\n"
+	@printf "#\n"
+	@printf "# The basic functionality provided by this makefile is to allow\n"
+	@printf "# you to compile 'foo.cpp' into the executable file 'foo' by executing\n"
+	@printf "#    make foo   \n"
+	@printf "# You can adapt this to the needs of your own project as necessary.\n"
+	@printf "\n\n";
+@{LSTAT}	@$(MAKE) static_command 
+@{LSHAR}	@$(MAKE) shared_command 
+
+
 INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
 INSTALLED_RPATH=@{LSHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
 INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
@@ -461,6 +476,30 @@ INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
 INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR) 
 
 INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
+
+
+
+static_command:
+	@printf '.cpp:\n'
+	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+	@$(MAKE) common_command
+@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
+	@printf '# "-lntl" ensures that program will link to ntl\n'
+@{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
+@{GMPL}@{RPATH}	@printf '# "-Wl,-rpath,$(GMP_LIBDIR)" ensures gmp is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GMP_LIBDIR) to LD_LIBRARY_PATH\n' 
+@{GMPL}	@printf '# "-lgmp" ensures that program will link to gmp\n' 
+@{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
+@{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GF2X_LIBDIR) to LD_LIBRARY_PATH\n' 
+@{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
+
+
+shared_command:
+	@printf '.cpp:\n'
+	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
+	@$(MAKE) common_command
+@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
+@{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
+	@printf '# "-lntl" ensures that program will link to ntl\n'
 
 common_command:
 	@printf '\n'
@@ -481,30 +520,6 @@ common_command:
 	@printf '# "$$<" expands to "foo.cpp" when run as "make foo"\n'
 	@printf '\n# LINKER OPTIONS\n'
 	@printf '# "-o $$@" expands to "-o foo" when run as "make foo"\n'
-
-
-static_command:
-	@printf '.cpp:\n'
-	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
-	@$(MAKE) common_command
-@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
-	@printf '# "-lntl" ensures that program will link to ntl\n'
-@{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
-@{GMPL}@{RPATH}	@printf '# "-Wl,-rpath,$(GMP_LIBDIR)" ensures gmp is found at runtime\n#    (if it is a shared lib)\n' 
-@{GMPL}	@printf '# "-lgmp" ensures that program will link to gmp\n' 
-@{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
-@{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    (if it is a shared lib)\n' 
-@{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
-
-
-shared_command:
-	@printf '.cpp:\n'
-	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
-	@$(MAKE) common_command
-@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
-@{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n' 
-	@printf '# "-lntl" ensures that program will link to ntl\n'
-
 
 
 #################################################################
