@@ -12,7 +12,9 @@ Changes:
 - added some -Wl,-rpath trickery to make sure we link to the right shared libs
 - added pkg-config stuff
 - added DESTDIR to uninstall
-- added USE_LIBTOOL option 
+- added ENABLE_LIBTOOL flag
+- added ENABLE_RPATH flag
+- added SYS_PREFIX var
 
 - updates to doc files: make sure to update doc/* on the web page 
 
@@ -25,18 +27,7 @@ documentation:
  - ../doc/tour-unix.html
 
 TODO:
- - add SYS_PREFIX config option (can change /usr/local without
-   forcing explicit -L/-I/rpath, DEF_PREFIX inherits from this)
  - take config.h out of INCL (should not go in tarball)
-
-MAYBE:
-- maybe add a flag ENABLE_RPATH (default =on)
-- maybe add a flag ENABLE_LIBTOOL (default =off)
-  - we would use libtool even when building static
-  - we would craete a user makefile that uses libtool 
-
- 
-
 
   
 

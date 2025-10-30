@@ -30,7 +30,8 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 %MakeFlag = (
 'SHARED'  => 'off',
 'NATIVE'  => 'on',
-'USE_LIBTOOL' => 'off',
+'ENABLE_LIBTOOL' => 'off',
+'ENABLE_RPATH' => undef
 );
 
 %MakeVal = (
@@ -50,7 +51,8 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'LDLIBS'      => '-lm',
 'CPPFLAGS'    => '',
 
-'DEF_PREFIX'  => '/usr/local',
+'SYS_PREFIX'  => '/usr/local',
+'DEF_PREFIX'  => '$(SYS_PREFIX)',
 
 'PREFIX'      => '$(DEF_PREFIX)',
 'LIBDIR'      => '$(PREFIX)/lib',
@@ -205,10 +207,10 @@ if ($MakeVal{'CXXFLAGS'} =~ '-march=|-mcpu=|-mtune=') {
 }
 
 
-# special pprocessing:  SHARED => USE_LIBTOOL
+# special pprocessing:  SHARED => ENABLE_LIBTOOL
 
 if ($MakeFlag{'SHARED'} eq 'on') {
-   $MakeFlag{'USE_LIBTOOL'} = 'on';
+   $MakeFlag{'ENABLE_LIBTOOL'} = 'on';
    $MakeVal{'STAT'} = '#';
    $MakeVal{'SHAR'} = '';
 }
@@ -220,9 +222,9 @@ else {
    
 
 
-# some special MakeVal values that are determined by USE_LIBTOOL
+# some special MakeVal values that are determined by ENABLE_LIBTOOL
 
-if ($MakeFlag{'USE_LIBTOOL'} eq 'off') {
+if ($MakeFlag{'ENABLE_LIBTOOL'} eq 'off') {
 
    $MakeVal{'NOLTOOL'} = '';
    $MakeVal{'LTOOL'} = '#';
@@ -357,16 +359,43 @@ if (exists($Variable{'DEF_PREFIX'}) ||
    $MakeVal{'NTLI'} = '';
 }
 
+# test if we should use RPATH stuff
+# if ENABLE_RPATH is explicitly set, we use it according whether that is on or off
+# otherwise, we use it if 
+#     we are not on macOS (we seem to need it) and either
+#        using GMP in a non-default lib location,
+#        using GF2X in a non-default lib location, or
+#        installing a shared NTL in a non-default location (mainly useful just for USER_MAKEFILE.txt)
+
+if ((defined($MakeFlag{'ENABLE_RPATH'}) && $MakeFlag{'ENABLE_RPATH'} eq 'on') ||
+    (!defined($MakeFlag{'ENABLE_RPATH'}) && $^O ne 'darwin' &&
+      ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')))) {
+
+   $MakeFlag{'ENABLE_RPATH'} = 'on';
+
+}
+else {
+
+   $MakeFlag{'ENABLE_RPATH'} = 'off';
+
+}
 
 
 
+#################################################
 # copy %MakeVal and %MakeFlag as is into %MakeSub
+#################################################
+
+
 
 %MakeSub = (%MakeVal, %MakeFlag);
 
 
-# copy %ConfigFlag into %ConfigSub, substituting 0 for off and 1 of on
 
+
+######################################################################
+# copy %ConfigFlag into %ConfigSub, substituting 0 for off and 1 of on
+######################################################################
 
 %ConfigSub = ( );
 
@@ -693,7 +722,11 @@ else {
 
 
 
+
+
+################################################################
 # By this point, all of the MakeSub variables need to be defined
+################################################################
 
 if ($nowrite) {
    GenFiles();
@@ -761,8 +794,11 @@ if (!exists($Variable{'TUNE'})) {
 # or of we are installing at a nonstandard location and we are building a shared library
 # (this last is only needed to build USER_MAKEFILE.txt)
 # note that on macOS, we do not need to use RPATH
-if (($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on'))  && $^O ne 'darwin') {
-#if ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')) { 
+
+
+
+if ($MakeSub{'ENABLE_RPATH'} eq 'on') {
+
    $MakeSub{'TESTRPATH'} = '-Wl,-rpath,.';
    if (!CheckCompile()) {
 

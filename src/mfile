@@ -50,6 +50,7 @@ LIBTOOL_LINK_LIBS=@{LIBTOOL_LINK_LIBS}
 # configure script will do "automagically" unless user overrides
 # that behavior
 
+SYS_PREFIX=@{SYS_PREFIX}
 DEF_PREFIX=@{DEF_PREFIX}
 
 PREFIX=@{PREFIX}
@@ -458,7 +459,19 @@ CheckSIMDE: CheckSIMDE.cpp
 
 #### auxilliary stuff to help build USER_MAKEFILE.txt ntl.pc
 
+INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
+INSTALLED_RPATH=@{SHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
+INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
+
+INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR) 
+
+INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
+
+
 user_makefile:
+#
+#common
+#
 	@printf "# This is a sample makefile that can be used to compile programs using \n"
 	@printf "# an installed version of NTL.\n"
 	@printf "# Using this ensures that your programs compile with flags consistent\n"
@@ -469,62 +482,23 @@ user_makefile:
 	@printf "#    make foo   \n"
 	@printf "# You can adapt this to the needs of your own project as necessary.\n"
 	@printf "\n\n";
-@{SHAR}	@$(MAKE) -s  shared_command 
-@{STAT}	@$(MAKE) -s  static_command 
-
-
-
-INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
-INSTALLED_RPATH=@{SHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
-INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
-
-INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR) 
-
-INSTALLED_LINK = $(CXX) $(INSTALLED_INCLUDE) $(CPPFLAGS) $(CXXFLAGS) $(CXXAUTOFLAGS) $(LDFLAGS)
-
-
-
-static_command:
-	@printf '.cpp:\n'
-	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
-	@printf '\n'
-	@printf '# ntl was installed as a static library with dependencies:'
-	@$(MAKE) -s common_command
-@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
-	@printf '# "-lntl" ensures that program will link to ntl\n'
-@{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
-@{GMPL}@{RPATH}	@printf '# "-Wl,-rpath,$(GMP_LIBDIR)" ensures gmp is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GMP_LIBDIR) to LD_LIBRARY_PATH\n' 
-@{GMPL}	@printf '# "-lgmp" ensures that program will link to gmp\n' 
-@{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
-@{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GF2X_LIBDIR) to LD_LIBRARY_PATH\n' 
-@{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
-@{LTOOL}	@printf '\n# ntl was installed using libtool\n'
-@{LTOOL}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
-@{LTOOL}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
-@{LTOOL}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
-@{LTOOL}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
-
-
-
-shared_command:
-	@printf '.cpp:\n'
-	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
-	@printf '\n'
-	@printf '# ntl was installed as a shared library with dependencies:'
-	@$(MAKE) -s common_command
-@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
-@{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
-	@printf '# "-lntl" ensures that program will link to ntl\n'
-@{NODARWIN}@{LTOOL}	@printf '\n# ntl was installed using libtool\n'
-@{NODARWIN}@{LTOOL}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
-@{NODARWIN}@{LTOOL}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
-@{NODARWIN}@{LTOOL}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
-@{NODARWIN}@{LTOOL}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
-
-
-
-
-common_command:
+#
+#static
+#
+@{STAT}	@printf '.cpp:\n'
+@{STAT}	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
+@{STAT}	@printf '\n'
+@{STAT}	@printf '# ntl was installed as a static library with dependencies:'
+#
+#shared
+#
+@{SHAR}	@printf '.cpp:\n'
+@{SHAR}	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
+@{SHAR}	@printf '\n'
+@{SHAR}	@printf '# ntl was installed as a shared library with dependencies:'
+#
+#common
+#
 @{GMP}	@printf ' gmp'
 @{GF2X}	@printf ' gf2x'
 	@printf '\n\n'
@@ -541,10 +515,40 @@ common_command:
 	@printf '# "$$<" expands to "foo.cpp" when run as "make foo"\n'
 	@printf '\n# LINKER OPTIONS\n'
 	@printf '# "-o $$@" expands to "-o foo" when run as "make foo"\n'
+#
+#static
+#
+@{STAT}@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
+@{STAT}	@printf '# "-lntl" ensures that program will link to ntl\n'
+@{STAT}@{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
+@{STAT}@{GMPL}@{RPATH}	@printf '# "-Wl,-rpath,$(GMP_LIBDIR)" ensures gmp is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GMP_LIBDIR) to LD_LIBRARY_PATH\n' 
+@{STAT}@{GMPL}	@printf '# "-lgmp" ensures that program will link to gmp\n' 
+@{STAT}@{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
+@{STAT}@{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GF2X_LIBDIR) to LD_LIBRARY_PATH\n' 
+@{STAT}@{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
+#
+#shared
+#
+@{SHAR}@{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
+@{SHAR}@{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
+@{SHAR}	@printf '# "-lntl" ensures that program will link to ntl\n'
+#
+#common
+#
+@{LTOOL}	@printf '\n# ntl was installed using libtool\n'
+@{LTOOL}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
+@{LTOOL}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
+@{LTOOL}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
+@{LTOOL}	@printf '# and may offer convenient access to more linkage options via libtool\n'
+@{LTOOL}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
+
+
 
 
 REQUIRES_GMP=@{GMP}gmp >= 5.0
 REQUIRES_GF2X=@{GF2X}gf2x >= 1.2
+# these version numbers are generic minimal requirments and do not
+# reflect the versions detected during the build
 
 pkg_config:
 	@printf 'includedir=$(INCLUDEDIR)\n'
