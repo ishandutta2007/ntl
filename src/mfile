@@ -469,8 +469,8 @@ user_makefile:
 	@printf "#    make foo   \n"
 	@printf "# You can adapt this to the needs of your own project as necessary.\n"
 	@printf "\n\n";
-@{SHAR}	@$(MAKE) shared_command 
-@{STAT}	@$(MAKE) static_command 
+@{SHAR}	@$(MAKE) -s  shared_command 
+@{STAT}	@$(MAKE) -s  static_command 
 
 
 
@@ -489,7 +489,7 @@ static_command:
 	@printf '\t$(INSTALLED_LINK) $$< -o $$@  $(INSTALLED_LIBPATH) -lntl $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS)\n'
 	@printf '\n'
 	@printf '# ntl was installed as a static library with dependencies:'
-	@$(MAKE) common_command
+	@$(MAKE) -s common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 	@printf '# "-lntl" ensures that program will link to ntl\n'
 @{GMPL}	@printf '# "-L$(GMP_LIBDIR)" ensures that gmp is found at link time\n' 
@@ -511,7 +511,7 @@ shared_command:
 	@printf '\t$(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBPATH) -lntl\n'
 	@printf '\n'
 	@printf '# ntl was installed as a shared library with dependencies:'
-	@$(MAKE) common_command
+	@$(MAKE) -s common_command
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 @{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
 	@printf '# "-lntl" ensures that program will link to ntl\n'
