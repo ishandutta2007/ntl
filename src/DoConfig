@@ -56,6 +56,7 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'LIBDIR'      => '$(PREFIX)/lib',
 'INCLUDEDIR'  => '$(PREFIX)/include',
 'DOCDIR'      => '$(PREFIX)/share/doc',
+'PKGDIR'      => '$(PREFIX)/lib/pkgconfig',
 
 'GMP_PREFIX'  => '$(DEF_PREFIX)',
 'GMP_INCDIR'  => '$(GMP_PREFIX)/include',
@@ -203,32 +204,28 @@ if ($MakeVal{'CXXFLAGS'} =~ '-march=|-mcpu=|-mtune=') {
    $MakeFlag{'NATIVE'} = 'off';
 }
 
-# special processing for USE_LIBTOOL
 
-$MakeVal{'LIBTOOL_LINK_AS_STATIC'} = '#';
-$MakeVal{'LIBTOOL_LINK_AS_SHARED'} = '';
+# special pprocessing:  SHARED => USE_LIBTOOL
 
-if ($MakeFlag{'USE_LIBTOOL'} eq 'on') { 
-
-   # we set SHARED to on, but at the final linking stage, we only
-   # build a static library
-
-   if ($MakeFlag{'SHARED'} eq 'off' ) {
-      $MakeVal{'LIBTOOL_LINK_AS_STATIC'} = '';
-      $MakeVal{'LIBTOOL_LINK_AS_SHARED'} = '#';
-   }
-
-   $MakeFlag{'SHARED'} = 'on';
+if ($MakeFlag{'SHARED'} eq 'on') {
+   $MakeFlag{'USE_LIBTOOL'} = 'on';
+   $MakeVal{'STAT'} = '#';
+   $MakeVal{'SHAR'} = '';
 }
+else {
+   $MakeVal{'STAT'} = '';
+   $MakeVal{'SHAR'} = '#';
+}
+   
    
 
 
-# some special MakeVal values that are determined by SHARED
+# some special MakeVal values that are determined by USE_LIBTOOL
 
-if ($MakeFlag{'SHARED'} eq 'off') {
+if ($MakeFlag{'USE_LIBTOOL'} eq 'off') {
 
-   $MakeVal{'LSTAT'} = '';
-   $MakeVal{'LSHAR'} = '#';
+   $MakeVal{'NOLTOOL'} = '';
+   $MakeVal{'LTOOL'} = '#';
 
    if (!defined($MakeVal{'LIBTOOL'})) {
       $MakeVal{'LIBTOOL'} = 'libtool';
@@ -240,8 +237,8 @@ if ($MakeFlag{'SHARED'} eq 'off') {
 
 } else {
 
-   $MakeVal{'LSTAT'} = '#';
-   $MakeVal{'LSHAR'} = '';
+   $MakeVal{'NOLTOOL'} = '#';
+   $MakeVal{'LTOOL'} = '';
 
    if (!defined($MakeVal{'LIBTOOL'})) {
 
@@ -507,13 +504,7 @@ sub GenFiles {
    print HFILEOUT "\n";
 
    foreach $name (sort keys %MakeSub) {
-      if ($name eq 'SHARED' && $MakeVal{'LIBTOOL_LINK_AS_STATIC'} eq '') {
-         # hack to output original setting of SHARED 
-         print HFILEOUT "SHARED=\"off\"\n";
-      }
-      else {
-         print HFILEOUT "$name=\"$MakeSub{$name}\"\n";
-      }
+      print HFILEOUT "$name=\"$MakeSub{$name}\"\n";
    }
    #print HFILEOUT "CXXFLAGS=\"$MakeSub{'CXXFLAGS'}\"\n";
    #print HFILEOUT "CXXAUTOFLAGS=\"$MakeSub{'CXXAUTOFLAGS'}\"\n";
@@ -693,9 +684,11 @@ Process_TUNE();
 
 if ($^O eq 'darwin') {
    $MakeSub{'DARWIN'} = '';
+   $MakeSub{'NODARWIN'} = '#';
 }
 else {
    $MakeSub{'DARWIN'} = '#';
+   $MakeSub{'NODARWIN'} = '';
 }
 
 

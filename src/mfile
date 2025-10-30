@@ -56,6 +56,7 @@ PREFIX=@{PREFIX}
 LIBDIR=@{LIBDIR}
 INCLUDEDIR=@{INCLUDEDIR}
 DOCDIR=@{DOCDIR}
+PKGDIR=@{PKGDIR}
 # where to install NTL
 
 DESTDIR=
@@ -401,16 +402,16 @@ setup4:
 
 #### commands to build things
 
-@{LIBTOOL_LINK_AS_STATIC}LIBTOOL_LINK_AS=-static
-@{LIBTOOL_LINK_AS_SHARED}LIBTOOL_LINK_AS=-version-info `cat VERSION_INFO`
+@{STAT}LIBTOOL_LINK_AS=-static
+@{SHAR}LIBTOOL_LINK_AS=-version-info `cat VERSION_INFO`
 
 ntl.a:	$(OBJ) 
-@{LSTAT}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #LSTAT
-@{LSTAT}	- $(RANLIB) ntl.a #LSTAT
-@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) $(LIBTOOL_LINK_AS) #LSHAR
+@{NOLTOOL}	$(AR) $(ARFLAGS) ntl.a $(OBJ) #NOLTOOL
+@{NOLTOOL}	- $(RANLIB) ntl.a #NOLTOOL
+@{LTOOL}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) $(LIBTOOL_LINK_AS) #LTOOL
 
-@{LSTAT}LCOMP= #LSTAT
-@{LSHAR}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LSHAR
+@{NOLTOOL}LCOMP= #NOLTOOL
+@{LTOOL}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LTOOL
 
 lip.o:	lip.cpp 
 	$(LCOMP) $(COMPILE) $(GMP_OPT_INCDIR) lip.cpp
@@ -452,10 +453,10 @@ CheckSIMDE: CheckSIMDE.cpp
 	$(LCOMP) $(COMPILE) $<
 
 .cpp: 
-@{LSTAT}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) #LSTAT
-@{LSHAR}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o $@ $< libntl.la #LSHAR
+@{NOLTOOL}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) #NOLTOOL
+@{LTOOL}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) -o $@ $< libntl.la #LTOOL
 
-#### auxilliary stuff to help build USER_MAKEFILE.txt
+#### auxilliary stuff to help build USER_MAKEFILE.txt ntl.pc
 
 user_makefile:
 	@printf "# This is a sample makefile that can be used to compile programs using \n"
@@ -468,14 +469,13 @@ user_makefile:
 	@printf "#    make foo   \n"
 	@printf "# You can adapt this to the needs of your own project as necessary.\n"
 	@printf "\n\n";
-@{LSTAT}	@$(MAKE) static_command 
-@{LSHAR}@{LIBTOOL_LINK_AS_SHARED}	@$(MAKE) shared_command 
-@{LSHAR}@{LIBTOOL_LINK_AS_STATIC}	@$(MAKE) static_command 
+@{SHAR}	@$(MAKE) shared_command 
+@{STAT}	@$(MAKE) static_command 
 
 
 
 INSTALLED_LIBDIR=@{NTLL}-L$(LIBDIR) 
-INSTALLED_RPATH=@{LSHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
+INSTALLED_RPATH=@{SHAR}@{RPATH}@{NTLL}-Wl,-rpath,$(LIBDIR)
 INSTALLED_LIBPATH=$(INSTALLED_LIBDIR) $(INSTALLED_RPATH)
 
 INSTALLED_INCLUDE=@{NTLI}-I$(INCLUDEDIR) 
@@ -498,11 +498,11 @@ static_command:
 @{GF2XL}	@printf '# "-L$(GF2X_LIBDIR)" ensures that gf2x is found at link time\n' 
 @{GF2XL}@{RPATH}	@printf '# "-Wl,-rpath,$(GF2X_LIBDIR)" ensures gf2x is found at runtime\n#    if it is a shared lib\n#    alternatively, add $(GF2X_LIBDIR) to LD_LIBRARY_PATH\n' 
 @{GF2XL}	@printf '# "-lgf2x" ensures that program will link to gf2x\n' 
-@{LSHAR}	@printf '\n# ntl was installed using libtool\n'
-@{LSHAR}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
-@{LSHAR}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
-@{LSHAR}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
-@{LSHAR}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
+@{LTOOL}	@printf '\n# ntl was installed using libtool\n'
+@{LTOOL}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
+@{LTOOL}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
+@{LTOOL}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
+@{LTOOL}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
 
 
 
@@ -515,11 +515,11 @@ shared_command:
 @{NTLL}	@printf '# "-L$(LIBDIR)" ensures ntl is found at link time\n'
 @{RPATH}@{NTLL}	@printf '# "-Wl,-rpath,$(LIBDIR)" ensures ntl is found at runtime\n#    alternatively, add $(LIBDIR) to LD_LIBRARY_PATH\n' 
 	@printf '# "-lntl" ensures that program will link to ntl\n'
-@{RPATH}@{LSHAR}	@printf '\n# ntl was installed using libtool\n'
-@{RPATH}@{LSHAR}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
-@{RPATH}@{LSHAR}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
-@{RPATH}@{LSHAR}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
-@{RPATH}@{LSHAR}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
+@{NODARWIN}@{LTOOL}	@printf '\n# ntl was installed using libtool\n'
+@{NODARWIN}@{LTOOL}	@printf '\n# in your project, you could alternatively compile and link as follows:\n'
+@{NODARWIN}@{LTOOL}	@printf '#\tlibtool --tag=CXX --mode=link $(INSTALLED_LINK) -o $$@ $$< $(INSTALLED_LIBDIR) -lntl\n'
+@{NODARWIN}@{LTOOL}	@printf '# which ensures ntl all dependencies are properly linked and accessible at runtime\n'
+@{NODARWIN}@{LTOOL}@{DARWIN}	@printf '# - on macOS, you may need to use someling like glibtool installed by (say)\n# - homebrew, and not the system libtool\n'
 
 
 
@@ -610,10 +610,12 @@ install:
 	cp -p ../doc/*.html $(DESTDIR)$(DOCDIR)/NTL
 	cp -p ../doc/*.gif $(DESTDIR)$(DOCDIR)/NTL
 	- chmod -R a+r $(DESTDIR)$(DOCDIR)/NTL
+	mkdir -p -m 755 $(DESTDIR)$(PKGDIR)
+	cp -p pkgfileout $(DESTDIR)$(PKGDIR)/ntl.pc
 	mkdir -p -m 755 $(DESTDIR)$(LIBDIR)
-@{LSTAT}	cp -p ntl.a $(DESTDIR)$(LIBDIR)/libntl.a #LSTAT
-@{LSTAT}	- chmod a+r $(DESTDIR)$(LIBDIR)/libntl.a #LSTAT
-@{LSHAR}	$(LIBTOOL) --mode=install cp -p libntl.la $(DESTDIR)$(LIBDIR) #LSHAR
+@{NOLTOOL}	cp -p ntl.a $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
+@{NOLTOOL}	- chmod a+r $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
+@{LTOOL}	$(LIBTOOL) --mode=install cp -p libntl.la $(DESTDIR)$(LIBDIR) #LTOOL
 	- $(MAKE) install_summary
 
 install_summary:
@@ -622,14 +624,16 @@ install_summary:
 	@echo '* include files installed to $(DESTDIR)$(INCLUDEDIR)/NTL'
 	@echo '* library files installed to $(DESTDIR)$(LIBDIR)'
 	@echo '* doc files installed to $(DESTDIR)$(DOCDIR)/NTL'
+	@echo '* pkg-config file installed to $(DESTDIR)$(PKGDIR)/ntl.pc'
 	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/CONFIG_LOG.txt for a summary of the configuration'
 	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/USER_MAKEFILE.txt for an example makefile to build user programs'
 
 uninstall:
-@{LSTAT}	rm -f $(LIBDIR)/libntl.a #LSTAT
-@{LSHAR}	$(LIBTOOL) --mode=uninstall rm -f $(LIBDIR)/libntl.la #LSHAR
-	rm -rf $(INCLUDEDIR)/NTL
-	rm -rf $(DOCDIR)/NTL
+@{NOLTOOL}	rm -f $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
+@{LTOOL}	$(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(LIBDIR)/libntl.la #LTOOL
+	rm -rf $(DESTDIR)$(INCLUDEDIR)/NTL
+	rm -rf $(DESTDIR)$(DOCDIR)/NTL
+	rm -f $(DESTDIR)$(PKGDIR)/ntl.pc
 
 #################################################################
 #
@@ -657,7 +661,7 @@ clean:
 	sh RemoveProg $(PROGS) MakeDesc $(AUXPROGS) gen_gmp_aux gf2x_version_1_2_or_later_required
 	rm -f *.o 
 	rm -rf small
-@{LSHAR}	- $(LIBTOOL) --mode=clean rm -f libntl.la *.lo #LSHAR
+@{LTOOL}	- $(LIBTOOL) --mode=clean rm -f libntl.la *.lo #LTOOL
 
 wclean:
 	rm -f *.o 
@@ -728,7 +732,7 @@ WOBJ=FFT.o GetTime.o GetPID.o ctools.o ZZ.o ZZVec.o ZZ_p.o ZZ_pX.o ZZ_pX1.o  \
 	thread.o BasicThreadPool.o fileio.o
 
 
-@{LSHAR}wntl.a: LCOMP= #LSHAR
+@{LTOOL}wntl.a: LCOMP= #LTOOL
 wntl.a:	$(WOBJ) 
 	$(AR) $(ARFLAGS) wntl.a $(WOBJ)
 	- $(RANLIB) wntl.a
