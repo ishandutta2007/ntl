@@ -543,6 +543,29 @@ common_command:
 	@printf '# "-o $$@" expands to "-o foo" when run as "make foo"\n'
 
 
+REQUIRES_GMP=@{GMP}gmp >= 5.0
+REQUIRES_GF2X=@{GF2X}gf2x >= 1.2
+
+pkg_config:
+	@printf 'includedir=$(INCLUDEDIR)\n'
+	@printf 'libdir=$(LIBDIR)\n'
+	@printf 'Name: NTL\n'
+	@printf 'Description: A Library for doing Number Theory\n'
+	@printf "Version: $$(sed 's/^ntl-//' DIRNAME)\n"
+	@printf 'Cflags: -I$${includedir}'
+	@case '$(CXXAUTOFLAGS)' in *'-std=c++11'*) printf ' -std=c++11' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-std=c++14'*) printf ' -std=c++14' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf ' -pthread' ;; esac
+	@case '$(CXXAUTOFLAGS)' in *'-fp-model precise'*) printf ' -fp-model precise' ;; esac
+	@printf '\n'
+	@printf 'Libs: -L$${libdir} -lntl' 
+	@case '$(CXXAUTOFLAGS)' in *'-pthread'*) printf ' -pthread' ;; esac
+	@printf '\n'
+	@printf 'Requires.private: $(REQUIRES_GMP) $(REQUIRES_GF2X)\n' 
+
+
+
+
 #################################################################
 #
 # Rule for running tests

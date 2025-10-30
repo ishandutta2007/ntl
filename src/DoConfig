@@ -205,6 +205,9 @@ if ($MakeVal{'CXXFLAGS'} =~ '-march=|-mcpu=|-mtune=') {
 
 # special processing for USE_LIBTOOL
 
+$MakeVal{'LIBTOOL_LINK_AS_STATIC'} = '#';
+$MakeVal{'LIBTOOL_LINK_AS_SHARED'} = '';
+
 if ($MakeFlag{'USE_LIBTOOL'} eq 'on') { 
 
    # we set SHARED to on, but at the final linking stage, we only
@@ -213,10 +216,6 @@ if ($MakeFlag{'USE_LIBTOOL'} eq 'on') {
    if ($MakeFlag{'SHARED'} eq 'off' ) {
       $MakeVal{'LIBTOOL_LINK_AS_STATIC'} = '';
       $MakeVal{'LIBTOOL_LINK_AS_SHARED'} = '#';
-   }
-   else {
-      $MakeVal{'LIBTOOL_LINK_AS_STATIC'} = '#';
-      $MakeVal{'LIBTOOL_LINK_AS_SHARED'} = '';
    }
 
    $MakeFlag{'SHARED'} = 'on';
@@ -477,6 +476,10 @@ sub GenFiles {
 # generate USER_MAKEFILE.txt
    
    system("$MakeVal{'MAKE_PROG'} -f mfileout user_makefile > umfileout");
+
+# generate ntl.pc file
+   
+   system("$MakeVal{'MAKE_PROG'} -f mfileout  pkg_config > pkgfileout");
 
 # generate CONFIG_LOG.txt
 

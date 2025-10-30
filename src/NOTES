@@ -8,6 +8,7 @@ Changes:
 - changed ConfigLog.h to CONFIG_LOG.txt
 - added a quick start guide in README
 - added some -Wl,-rpath trickery to make sure we link to the right shared libs
+- added pkg-config stuff
 
 - updates to doc files: make sure to update doc/* on the web page 
 
@@ -20,6 +21,7 @@ documentation:
  - ../doc/tour-unix.html
 
 TODO:
+ - add PCDIR
  - add SYS_PREFIX config option (can change /usr/local without
    forcing explicit -L/-I/rpath, DEF_PREFIX inherits from this)
  - take config.h out of INCL (should not go in tarball)
