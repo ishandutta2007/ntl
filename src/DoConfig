@@ -367,18 +367,35 @@ if (exists($Variable{'DEF_PREFIX'}) ||
 #        using GF2X in a non-default lib location, or
 #        installing a shared NTL in a non-default location (mainly useful just for USER_MAKEFILE.txt)
 
-if ((defined($MakeFlag{'ENABLE_RPATH'}) && $MakeFlag{'ENABLE_RPATH'} eq 'on') ||
-    (!defined($MakeFlag{'ENABLE_RPATH'}) && $^O ne 'darwin' &&
-      ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')))) {
+if (!defined($MakeFlag{'ENABLE_RPATH'})) {
 
-   $MakeFlag{'ENABLE_RPATH'} = 'on';
+   if ($^O ne 'darwin' &&
+         ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || 
+            ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on'))) {
+
+      $MakeFlag{'ENABLE_RPATH'} = 'on';
+
+   }
+   else {
+
+      $MakeFlag{'ENABLE_RPATH'} = 'off';
+   }
 
 }
-else {
 
-   $MakeFlag{'ENABLE_RPATH'} = 'off';
 
-}
+#if ((defined($MakeFlag{'ENABLE_RPATH'}) && $MakeFlag{'ENABLE_RPATH'} eq 'on') ||
+#    (!defined($MakeFlag{'ENABLE_RPATH'}) && $^O ne 'darwin' &&
+#      ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')))) {
+#
+#   $MakeFlag{'ENABLE_RPATH'} = 'on';
+#
+#}
+#else {
+#
+#   $MakeFlag{'ENABLE_RPATH'} = 'off';
+#
+#}
 
 
 
@@ -552,6 +569,9 @@ sub CopyFiles {
    system("cp cfileout ../include/NTL/config.h") and die "Error: CopyFile failed\n";
    system("cp hfileout ../include/NTL/CONFIG_LOG.txt") and die "Error: CopyFile failed\n";
    system("cp umfileout ../include/NTL/USER_MAKEFILE.txt") and die "Error: CopyFile failed\n";
+   system("mkdir -p ../lib/pkgconfig") and die "Error: CopyFile failed\n";
+   system("cp pkgfileout ../lib/pkgconfig/ntl.pc") and die "Error: CopyFile failed\n";
+
 
    return 1;
 }
@@ -994,6 +1014,7 @@ print("generated makefile\n");
 print("generated ../include/NTL/config.h\n");
 print("generated ../include/NTL/CONFIG_LOG.txt\n");
 print("generated ../include/NTL/USER_MAKEFILE.txt\n");
+print("generated ../lib/pkgconfig/ntl.pc\n");
 exit 0;
 
 

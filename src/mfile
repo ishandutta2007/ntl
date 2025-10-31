@@ -215,7 +215,7 @@ INCL=FFT.h FFT_impl.h FacVec.h GF2.h GF2E.h GF2EX.h GF2EXFactoring.h GF2X.h  \
 	vec_double.h vec_long.h vec_lzz_p.h vec_lzz_pE.h vec_quad_float.h vec_vec_GF2.h  \
 	vec_vec_GF2E.h vec_vec_RR.h vec_vec_ZZ.h vec_vec_ZZ_p.h vec_vec_ZZ_pE.h  \
 	vec_vec_long.h vec_vec_lzz_p.h vec_vec_lzz_pE.h vec_xdouble.h xdouble.h  \
-	config.h version.h new.h vec_ulong.h vec_vec_ulong.h SmartPtr.h  \
+	version.h new.h vec_ulong.h vec_vec_ulong.h SmartPtr.h  \
 	Lazy.h LazyTable.h thread.h  BasicThreadPool.h MatPrime.h PD.h pd_FFT.h  \
 	linux_s390x.h
 
@@ -615,7 +615,7 @@ install:
 	cp -p ../doc/*.gif $(DESTDIR)$(DOCDIR)/NTL
 	- chmod -R a+r $(DESTDIR)$(DOCDIR)/NTL
 	mkdir -p -m 755 $(DESTDIR)$(PKGDIR)
-	cp -p pkgfileout $(DESTDIR)$(PKGDIR)/ntl.pc
+	cp -p ../lib/pkgconfig/ntl.pc $(DESTDIR)$(PKGDIR)
 	mkdir -p -m 755 $(DESTDIR)$(LIBDIR)
 @{NOLTOOL}	cp -p ntl.a $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
 @{NOLTOOL}	- chmod a+r $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL

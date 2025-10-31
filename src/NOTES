@@ -27,7 +27,9 @@ documentation:
  - ../doc/tour-unix.html
 
 TODO:
+ - look at clobber, clean, and uninstall
  - take config.h out of INCL (should not go in tarball)
+   DONE: but make sure it doesn't break anything
 
   
 
