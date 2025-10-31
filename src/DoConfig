@@ -155,16 +155,16 @@ foreach $arg (@ARGV) {
 
       $Variable{$name} = 0;
       
-      if (exists($MakeFlag{$name}) && ($val =~ 'on|off')) {
-         $MakeFlag{$name} = $val;
+      if (exists($MakeFlag{$name}) && (lc($val) =~ 'on|off')) {
+         $MakeFlag{$name} = lc($val);
          next;
       }
       elsif (exists($MakeVal{$name})) {
          $MakeVal{$name} = $val;
          next;
       }
-      elsif (exists($ConfigFlag{$name}) && ($val =~ 'on|off')) {
-         $ConfigFlag{$name} = $val;
+      elsif (exists($ConfigFlag{$name}) && (lc($val) =~ 'on|off')) {
+         $ConfigFlag{$name} = lc($val);
          next;
       }
       elsif (exists($ConfigVal{$name})) {

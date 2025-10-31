@@ -714,7 +714,7 @@ package:
 	rm -rf `cat DIRNAME`
 
 winpack:
-	./configure --nowrite NTL_GMP_LIP=off NTL_TLS_HACK=off
+	./configure --nowrite NTL_GMP_LIP=off NTL_TLS_HACK=off ENABLE_RPATH=off
 	sh dosify "$(SRC)" "$(INCL)" "$(DOC)" "$(TS)" "$(TD)" "$(FEATURES)"
 	rm -rf `cat WINDIR`
 	rm -f `cat WINDIR`.zip 
