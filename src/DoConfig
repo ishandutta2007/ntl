@@ -133,6 +133,7 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 
 );
 
+%Original = (%MakeVal, %MakeFlag);
 
 %Variable = ();
 
@@ -549,7 +550,7 @@ sub GenFiles {
 
    print HFILEOUT "\n";
 
-   foreach $name (sort keys %MakeSub) {
+   foreach $name (sort keys %Original) {
       print HFILEOUT "$name=\"$MakeSub{$name}\"\n";
    }
    #print HFILEOUT "CXXFLAGS=\"$MakeSub{'CXXFLAGS'}\"\n";
