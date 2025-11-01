@@ -139,6 +139,16 @@ SIMDE_PREFIX=$(DEF_PREFIX)
 #   SIMDE_INCDIR=$(SIMDE_PREFIX)/include 
 # The variable SIMDE_INCDIR may be overridden.
 
+#### Example:
+# If you do not set DEF_PREFIX, GMP_PREFIX, or GMP_INCDIR, it will be assumed
+# that the GMP header file gmp.h is installed in $(SYS_PREFIX)/include and that
+# a -I flag is not needed to find it.  If you set DEF_PREFIX, but not
+# GMP_PREFIX or GMP_INCDIR, it will be assumed that the GMP header file gmp.h
+# is installed in $(DEF_PREFIX)/include and a -I$(DEF_PREFIX)/include will be
+# included in the generated makefile.  Similar assumptions are made for finding
+# the GMP library itself at link time (with a possible -L flag) and at run time
+# (with a possible -Wl,-rpath flag).
+
 ########## Shared libraries and libtool
 
 SHARED=off   # on/off switch 
