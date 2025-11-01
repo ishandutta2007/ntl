@@ -2,18 +2,18 @@
 usage: ./configure [ variable=value ]...
 
 Generates the following files: 
-* makefile: used to build (run "make") and install (run "make install")
-* ../include/NTL/config.h: used by NTL source code
-* ../include/NTL/CONFIG_LOG.txt: summary of the configuration setting
-* ../include/NTL/USER_MAKEFILE.txt: makefile that can be used for simple 
+- makefile: used to build (run "make") and install (run "make install")
+- ../include/NTL/config.h: used by NTL source code
+- ../include/NTL/CONFIG_LOG.txt: summary of the configuration setting
+- ../include/NTL/USER_MAKEFILE.txt: makefile that can be used for simple 
      applications or modified for other applications.  It's useful to look 
      at this makefile to see what compiler flags are used and why.
-* ../lib/pkgconfig/ntl.pc: a pkg-config file that can be useful for integrating
+- ../lib/pkgconfig/ntl.pc: a pkg-config file that can be useful for integrating
      NTL into build systems like Cmake/Meson/
 
 
-# Each configuration variable FOO is shown with its defailt value bar as
-# FOO=bar.  For on/off switches, the only possible values are 'on' and 'off'
+Each configuration variable FOO is shown with its defailt value bar as FOO=bar.
+For on/off switches, the only possible values are 'on' and 'off'
 
 ################### The most important variables ###################
 
@@ -108,8 +108,8 @@ PREFIX=$(DEF_PREFIX)
 
 GMP_PREFIX=$(DEF_PREFIX)
 
-# Prefix at which GMP components are to be found. Needed if NTL_GMP_LIP=on and
-# GMP components are not installed in a standard "system" prefix.
+# Prefix at which GMP components have been installed. Needed if NTL_GMP_LIP=on
+# and GMP components are not installed in a standard "system" prefix.
 # - header file gmp.h in $(GMP_INCDIR), where GMP_INCDIR=$(GMP_PREFIX)/include 
 # - library file(s) libgmp.{a,so} in $(GMP_LIBDIR), where
 #   GMP_LIBDIR=$(GMP_PREFIX)/lib
@@ -119,8 +119,9 @@ GMP_PREFIX=$(DEF_PREFIX)
 
 GF2X_PREFIX=$(DEF_PREFIX)
 
-# Prefix at which GF2X components are to be found. Needed if NTL_GF2X_LIP=on
-# and GF2X components are not installed in a standard "system" prefix.
+# Prefix at which GF2X components have been installed. Needed if
+# NTL_GF2X_LIB=on and GF2X components are not installed in a standard "system"
+# prefix.
 # - header file gf2x.h in $(GF2X_INCDIR), where
 #   GF2X_INCDIR=$(GF2X_PREFIX)/include 
 # - library file(s) libgf2x.{a,so} in $(GF2X_LIBDIR), where
@@ -131,8 +132,9 @@ GF2X_PREFIX=$(DEF_PREFIX)
 
 SIMDE_PREFIX=$(DEF_PREFIX)
 
-# Prefix at which SIMDE components are to be found. Needed if NTL_SIMDE_LIP=on
-# and SIMDE components are not installed in a standard "system" prefix.
+# Prefix at which SIMDE components have been installed. Needed if
+# NTL_SIMDE_LIB=on and SIMDE components are not installed in a standard
+# "system" prefix.
 # - header files in $(SIMDE_INCDIR)/simde, where
 #   SIMDE_INCDIR=$(SIMDE_PREFIX)/include 
 # The variable SIMDE_INCDIR may be overridden.
@@ -141,8 +143,9 @@ SIMDE_PREFIX=$(DEF_PREFIX)
 
 SHARED=off   # on/off switch 
 
-# Turn on if to generate a shared library, in addition to a static library.
-# If SHARED=on, the makefile will use libtool to build the library (see below).
+# By default, only a static library is built.  Turn this on to build a shared
+# library, in addition to a static library.  If SHARED=on, the makefile will
+# use libtool to build the library (see below).
 
 ENABLE_LIBTOOL=off   # on/off switch
 
@@ -164,7 +167,7 @@ LIBTOOL=undefined
 
 ################### Other variables ###################
 
-######### Explicit tuning
+######### tuning
 
 TUNE=generic (or x86 or linux-s390x)
 
@@ -226,7 +229,7 @@ NTL_EXCEPTIONS=off   # on/off switch
 # mode that prevents memory leaks (and other problems).  In addition, some move
 # constructors and move assignment operators may not be declared "noexcept".
 
-########### Language stadards
+########### Language standards
 
 NTL_STD_CXX11=on   # on/off switch to build assuming C++11 features
 NTL_STD_CXX14=off  # on/off switch to build assuming C++14 features
