@@ -261,10 +261,30 @@ NTL_SAFE_VECTORS=on  # Build in "safe vector mode"
 # NTL_STD_CXX14 is already set).  See vector documentation file for more
 # details.
 
+############# Rpath madness
+
+ENABLE_RPATH=undefined   # on/off switch 
+
+If turned on, the makefile will attempt to use -Wl,-rpath linker options to
+locate shared libraries at runtime. Some systems will oftentimes need this
+option. Without it, a program might successfully link but fail to run because
+it cannot load a shared library, or worse, it might load the wrong shared
+library. This is especially problematic on systems where GMP has been installed
+as a suboptimally compiled system library and you want to use an optimally
+compiled GMP in a non-standard location. Without -Wl,-rpath set during linking,
+your program may end up using the non-optimal GMP at run time, even if the
+optimal GMP was found at link time. This is mostly a problem on Linux, and is
+generally not a problem on macOS.
+
+If left undefined, the configure script will heuristically turn it on or off,
+depending on your system.  If defined by passing an argument
+ENAABLE_RPATH={on,off} to the configure script, that choice will be respected.
+
+
 
 ############ AVX FFT
 
-NTL_ENABLE_AVX_FFT=off
+NTL_ENABLE_AVX_FFT=off   # on/off switch
 
 # implement the small-prime FFT using AVX  instructions...this is experimental
 # at the  moment, and may lead to worse performance
@@ -282,7 +302,7 @@ NTL_ENABLE_AVX_FFT=off
 
 ########### Avoid 512-bit AVX registers
 
-NTL_AVOID_AVX512=off 
+NTL_AVOID_AVX512=off   # on/off switch
 
 # avoid using 512-bit AVX registers
 
@@ -292,8 +312,8 @@ NTL_AVOID_AVX512=off
 
 ########### Use AES-256-CTR based pseudorandom generator
 
-NTL_RANDOM_AES256CTR=off 
-
+NTL_RANDOM_AES256CTR=off   # on/off switch
+ 
 # implement pseudorandom generator using AES-256-CTR
 
 # AES-256-CTR based pseudorandom generation may be faster than the
