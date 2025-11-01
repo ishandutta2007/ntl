@@ -104,7 +104,7 @@ GMP_OPT_LIBPATH=$(GMP_OPT_LIBDIR) $(GMP_OPT_RPATH)
 
 ###############################################################
 #
-#  Third, if you want to use gf2x (a library for fast
+#  Third, if you want to use GF2X (a library for fast
 #  multiplication over GF(2)[X]), you need to
 #  define the variables GF2X_OPT_INCDIR, GF2X_OPT_LIBDIR, GF2X_OPT_LIB below.
 #  You also will have to set NTL_GF2X_LIB 
@@ -115,7 +115,7 @@ GMP_OPT_LIBPATH=$(GMP_OPT_LIBDIR) $(GMP_OPT_RPATH)
 GF2X_PREFIX=@{GF2X_PREFIX}
 
 GF2X_INCDIR=@{GF2X_INCDIR}
-# directory containing gf2x.h if using gf2x
+# directory containing gf2x.h if using GF2X
 
 GF2X_LIBDIR=@{GF2X_LIBDIR}
 # directory containing libgf2x.a
@@ -123,14 +123,14 @@ GF2X_LIBDIR=@{GF2X_LIBDIR}
 GF2X_OPT_INCDIR=@{GF2XI}-I$(GF2X_INCDIR) # GF2X
 GF2X_OPT_LIBDIR=@{GF2XL}-L$(GF2X_LIBDIR) # GF2X
 GF2X_OPT_LIB=@{GF2X}-lgf2x # GF2X
-# uncomment these if using gf2x
+# uncomment these if using GF2X
 
 GF2X_OPT_RPATH=@{GF2XL}@{RPATH}-Wl,-rpath,$(GF2X_LIBDIR)
-# uncomment this if using gf2x
+# uncomment this if using GF2X
 
 GF2X_OPT_LIBPATH=$(GF2X_OPT_LIBDIR) $(GF2X_OPT_RPATH)
-# used when linking to gf2x without libtool
-# this ensures that we link to the right version of a shared gf2x library
+# used when linking to GF2X without libtool
+# this ensures that we link to the right version of a shared GF2X library
 
 
 
@@ -146,10 +146,10 @@ GF2X_OPT_LIBPATH=$(GF2X_OPT_LIBDIR) $(GF2X_OPT_RPATH)
 SIMDE_PREFIX=@{SIMDE_PREFIX}
 
 SIMDE_INCDIR=@{SIMDE_INCDIR}
-# directory containing gf2x.h if using gf2x
+# directory containing simde include directory if using SIMDE
 
 SIMDE_OPT_INCDIR=@{SIMDEI}-I$(SIMDE_INCDIR) # SIMDE
-# uncomment these if using simde
+# uncomment these if using SIMDE
 
 
 ###############################################################
