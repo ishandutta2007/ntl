@@ -284,8 +284,9 @@ NTL_STD_CXX14=off  # on/off switch to build assuming C++14 features
 # Setting one of these may also result in passing pass either -std=c++11 or
 # -std=c++14 through to the compiler via CXXAUTOFLAGS (see below).
 
-# Note that nowadays, most C++ compilers are running a standard of C++11 or
-# higher, in which case these do not need to be set.
+# These flags are mostly obsolete by now, as most C++ compilers nowadays are
+# running a standard of C++11 or higher by default.
+
 
 ############ Safe vector mode
 
