@@ -34,16 +34,22 @@ The most common and important options:
      typically have to specify where GMP is installed
    - the header file gmp.h should be located in $(GMP_PREFIX)/include, 
      and the library file(s) libgmp.{a,so} should be in $(GMP_PREFIX)/lib
-   - note that for best performannce, you may want to build GMP from source,
+   - note that for best performance, you may want to build GMP from source,
      rather than rely on a system installation, which is often not tuned
      to your particular machine, especially on common x86 linux distributions,
-     that are often compiled to target a generic x86
+     where GMP is often compiled to target a generic x86
 
    PREFIX=/path/to/ntl/installation
    - typically, you will have to specify where you want to install NTL
    - "make install" will copy NTL header files to $(PREFIX)/include/NTL, 
      library file(s) libntl.{a,so} to $(PREFIX)/lib, documentation files to
-     $(PREFIX)/doc/NTL, and a pkg-config file ntl.pc to $(PREFIX)/lib/pkgconfig. 
+     $(PREFIX)/doc/NTL, and a pkg-config file ntl.pc to $(PREFIX)/lib/pkgconfig 
+   
+   DEF_PREFIX=/default/installation/path
+   - as a short cut, you can set DEF_PREFIX so that GMP_PREFIX and PREFIX will 
+     default to that value
+   - for example, if you are installing both GMP and NTL to $HOME/.local,
+     just set DEF_PREFIX=$HOME/.local
    
    SHARED=on
    - this defaults to "off", but you should set it to "on" if you want
