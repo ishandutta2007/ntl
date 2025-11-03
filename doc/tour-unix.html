@@ -189,11 +189,11 @@ Multi-threading
 
 <ul>
 <li>
-By default, NTL currently compiles in a thread safe manner
-(the configuration switch <tt>NTL_THREADS</tt> is on)
+By default, NTL compiles in a thread safe manner
+(with configuration option <tt>NTL_THREADS=on</tt>n)
 and many internal algorithms will exploit multiple threads
 if they are enabled 
-(the configuration switch <tt>NTL_THREAD_BOOST</tt> is on).
+(with configuration option <tt>NTL_THREAD_BOOST=on</tt>).
 <li>
 See <a href="tour-ex7.html">this example</a> for more on 
 exploiting multiple threads.
@@ -219,9 +219,11 @@ By default, NTL treats errors in a very old-fashioned way:
 by printing an error message and aborting your program.
 <li>
 However, you can override this behavior 
-by configuring with <tt>NTL_EXCEPTIONS=on</tt>.
+by configuration option <tt>NTL_EXCEPTIONS=on</tt>.
 <li>
 This will make NTL throw an exception instead of aborting.
+<li>
+See <a href="tour-struct.html#except">here</a> for more details.
 <li>
 It is not enabled by default because (a) most NTL clients probably
 don't need fancy exception handling, and (b) there is a 
