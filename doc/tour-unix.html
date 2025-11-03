@@ -25,7 +25,7 @@ This procedure should work on most Unix or Unix-like platorms
 
 
 To obtain the source code and documentation for NTL,
-<a href="http://www.shoup.net/ntl/download.html">
+<a href="https://libntl.org/download.html">
 download <tt>ntl-xxx.tar.gz</tt></a>,
 placing it a directory, and then, working in this directory,
 do the following.
@@ -35,14 +35,60 @@ Here, "<tt>xxx</tt>" denotes the current version number.
 
 <p>
 <pre>
-   % gunzip ntl-xxx.tar.gz
-   % tar xf ntl-xxx.tar
+   % tar -xf ntl-xxx.tar.gz
    % cd ntl-xxx/src
-   % ./configure 
+   % ./configure [ variable=value ]... 
    % make
-   % make check
-   % sudo make install
+   % make install
 </pre>
+
+Note that NTL's configure script does not follow the normal autotools syntax 
+for passing options to the script.
+Each option is of the form <tt>variable=value</tt>.
+The most common and important options:
+
+<ul>
+<li>
+<tt>GMP_PREFIX=/path/to/gmp/installation</tt>  
+<ul>
+<li> 
+by defaut, NTL relies on GMP, the GNU multi-precision library, and you will 
+typically have to specify where GMP is installed
+<li>
+the header file <tt>gmp.h</tt> should be located in <tt>$(GMP_PREFIX)/include</tt>, 
+and the library file(s) <tt>libgmp.{a,so}</tt> should be in <tt>$(GMP_PREFIX)/lib</tt>
+<li>
+note that for best performannce, you may want to build GMP from source,
+rather than rely on a system installation, which is often not tuned
+to your particular machine, especially on common x86 linux distributions,
+that are often compiled to target a generic x86
+</ul>
+<li>
+<tt>PREFIX=/path/to/ntl/installation</tt>
+<ul>
+<li>
+typically, you will have to specify where you want to install NTL
+<li>
+"make install" will copy NTL header files to <tt>$(PREFIX)/include/NTL</tt>, 
+library file(s) <tt>libntl.{a,so}</tt> to <tt>$(PREFIX)/lib</tt>, documentation files to
+<tt>$(PREFIX)/doc/NTL</tt>, and a pkg-config file ntl.pc to <tt>$(PREFIX)/lib/pkgconfig</tt>. 
+</ul>
+<li>
+<tt>SHARED=on</tt>
+<ul>
+<li>
+this defaults to "off", but you should set it to "on" if you want
+to build NTL as a shared (dynamic) library
+</ul>
+</ul>
+
+See <a href="config.txt">config.txt</a> for all the options.
+
+<p>
+XXX
+
+<p>
+
 
 This will build, test, and install NTL in 
 <tt>/usr/local</tt>.

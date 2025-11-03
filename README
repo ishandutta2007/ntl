@@ -33,7 +33,7 @@ The most common and important options:
    - by defaut, NTL relies on GMP, the GNU multi-precision library, and you will 
      typically have to specify where GMP is installed
    - the header file gmp.h should be located in $(GMP_PREFIX)/include, 
-     and the library file(s) libgmp.{a,so} should be in $(GMP_PREFIX)/bin
+     and the library file(s) libgmp.{a,so} should be in $(GMP_PREFIX)/lib
    - note that for best performannce, you may want to build GMP from source,
      rather than rely on a system installation, which is often not tuned
      to your particular machine, especially on common x86 linux distributions,
