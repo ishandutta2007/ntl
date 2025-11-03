@@ -32,7 +32,7 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
 #include <NTL/simde/x86/sse2.h>
-#include <NTL/simde/x86/clmul.h>
+//#include <NTL/simde/x86/clmul.h>
 
 
 #if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
