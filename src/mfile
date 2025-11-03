@@ -136,25 +136,10 @@ GF2X_OPT_LIBPATH=$(GF2X_OPT_LIBDIR) $(GF2X_OPT_RPATH)
 
 
 
-###############################################################
-#
-#  Fourth, if you want to use simde (sind everywhere), set the
-#  following variables, as well as NTL_SIMDE_LIB
-#
-###############################################################
-
-SIMDE_PREFIX=@{SIMDE_PREFIX}
-
-SIMDE_INCDIR=@{SIMDE_INCDIR}
-# directory containing simde include directory if using SIMDE
-
-SIMDE_OPT_INCDIR=@{SIMDEI}-I$(SIMDE_INCDIR) # SIMDE
-# uncomment these if using SIMDE
-
 
 ###############################################################
 #
-# Fifth, if you do not want to run the wizard that automagically
+# Fourth, if you do not want to run the wizard that automagically
 # sets some performace related flags in config.h, set the flag below.
 #
 ###############################################################
@@ -250,7 +235,7 @@ MD=MakeDesc.cpp MakeDescAux.cpp newnames.cpp gen_gmp_aux.cpp gf2x_version_1_2_or
 GT=GetTime0.cpp GetTime1.cpp GetTime2.cpp GetTime3.cpp GetTime4.cpp GetTime5.cpp TestGetTime.cpp
 GP=GetPID1.cpp GetPID2.cpp TestGetPID.cpp
 CH=CheckCompile.cpp GenConfigInfo.cpp CheckContract.cpp  \
-	CheckThreads.cpp CheckGMP.cpp CheckSIMDE.cpp
+	CheckThreads.cpp CheckGMP.cpp 
 
 AUXPROGS = TestGetTime TestGetPID CheckFeatures CheckCompile GenConfigInfo CheckContract \
 	CheckThreads
@@ -379,7 +364,7 @@ setup2:
 	echo "*** CheckFeatures log ***" > CheckFeatures.log
 	sh MakeGetTime "$(LINK)" "$(LDLIBS)"
 	sh MakeGetPID  "$(LINK)" "$(LDLIBS)"
-	sh MakeCheckFeatures "$(FEATURES)" "$(LINK) $(SIMDE_OPT_INCDIR)" "$(LDLIBS)"
+	sh MakeCheckFeatures "$(FEATURES)" "$(LINK)" "$(LDLIBS)"
 
 # NOTE: to add a feature XXX:
 #   * add a program CheckXXX.cpp which returns 0 if XXX works, -1 otherwise
@@ -418,10 +403,10 @@ lip.o:	lip.cpp
 	$(LCOMP) $(COMPILE) $(GMP_OPT_INCDIR) lip.cpp
 
 GF2X.o:	GF2X.cpp
-	$(LCOMP) $(COMPILE) $(GF2X_OPT_INCDIR) $(SIMDE_OPT_INCDIR) GF2X.cpp
+	$(LCOMP) $(COMPILE) $(GF2X_OPT_INCDIR) GF2X.cpp
 
 mat_lzz_p.o:    mat_lzz_p.cpp
-	$(LCOMP) $(COMPILE) $(SIMDE_OPT_INCDIR) mat_lzz_p.cpp
+	$(LCOMP) $(COMPILE) mat_lzz_p.cpp
 
 quad_float.o:	quad_float.cpp
 	$(LCOMP) $(COMPILE) $(NOCONTRACT) quad_float.cpp
@@ -444,9 +429,6 @@ CheckThreads: CheckThreads.cpp
 
 CheckGMP: CheckGMP.cpp
 	$(LINK) $(GMP_OPT_INCDIR) -o  CheckGMP CheckGMP.cpp $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(LDLIBS)
-
-CheckSIMDE: CheckSIMDE.cpp
-	$(LINK) $(SIMDE_OPT_INCDIR) -o  CheckSIMDE CheckSIMDE.cpp $(LDLIBS)
 
 
 
@@ -592,6 +574,9 @@ check:
 #   This helps avoid some problems (especially when copying ntl.a).
 #   Also, an attempt is made to make everything that is
 #   installed readable by everyone.
+#
+#   Note: we do not install the simde header files as these are not 
+#   needed by clients.
 #   
 # make uninstall removes these files
 #   
@@ -714,7 +699,7 @@ package:
 	rm -rf `cat DIRNAME`
 
 winpack:
-	./configure --nowrite NTL_GMP_LIP=off NTL_TLS_HACK=off ENABLE_RPATH=off
+	./configure --nowrite NTL_GMP_LIP=off NTL_SIMDE_LIB=off NTL_TLS_HACK=off ENABLE_RPATH=off
 	sh dosify "$(SRC)" "$(INCL)" "$(DOC)" "$(TS)" "$(TD)" "$(FEATURES)"
 	rm -rf `cat WINDIR`
 	rm -f `cat WINDIR`.zip 

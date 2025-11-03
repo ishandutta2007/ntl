@@ -12,8 +12,8 @@
 #elif (defined(NTL_SIMDE_LIB))
 
 #define SIMDE_ENABLE_NATIVE_ALIASES
-#include <simde/x86/avx.h>
-#include <simde/x86/fma.h>
+#include <NTL/simde/x86/avx.h>
+#include <NTL/simde/x86/fma.h>
 
 #if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
 

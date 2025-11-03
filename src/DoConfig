@@ -68,9 +68,6 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'GF2X_INCDIR'  => '$(GF2X_PREFIX)/include',
 'GF2X_LIBDIR'  => '$(GF2X_PREFIX)/lib',
 
-'SIMDE_PREFIX'  => '$(DEF_PREFIX)',
-'SIMDE_INCDIR'  => '$(SIMDE_PREFIX)/include',
-
 'MAKE_PROG'    => 'make',
 
 'TUNE'         => 'generic',
@@ -99,7 +96,7 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'NTL_THREAD_BOOST'        => 'on',
 'NTL_GMP_LIP'             => 'on',
 'NTL_GF2X_LIB'            => 'off',
-'NTL_SIMDE_LIB'           => 'off',
+'NTL_SIMDE_LIB'           => 'on',
 'NTL_X86_FIX'             => 'off',
 'NTL_NO_X86_FIX'          => 'off',
 'NTL_NO_INIT_TRANS'       => 'on',
@@ -327,20 +324,6 @@ if ($ConfigFlag{'NTL_GF2X_LIB'} eq 'on') {
        exists($Variable{'GF2X_PREFIX'}) ||
        exists($Variable{'GF2X_LIBDIR'})) {
       $MakeVal{'GF2XL'} = '';
-   }
-}
-
-# special SIMDE variables
-
-
-$MakeVal{'SIMDEI'} = '#';
-
-
-if ($ConfigFlag{'NTL_SIMDE_LIB'} eq 'on') {
-   if (exists($Variable{'DEF_PREFIX'}) ||
-       exists($Variable{'SIMDE_PREFIX'}) ||
-       exists($Variable{'SIMDE_INCDIR'})) {
-      $MakeVal{'SIMDEI'} = '';
    }
 }
 
@@ -876,32 +859,6 @@ else {
       CheckFlag('-fp-model precise');
    }
 }
-
-# some SIMDE sanity checking
-
-sub CheckSIMDE {
-   return Exec("CheckSIMDE");
-}
-
-
-
-if ($ConfigSub{'NTL_SIMDE_LIB'} ) {
-
-   if (!CheckSIMDE()) {
-      die "Error: NTL_SIMDE_LIB set but not accessible -- set DEF_PREFIX or SIMDE_PREFIX to point to location of SIMDE\n";
-   }
-
-}
-else {
-   # currenly supported machines: 
-   # ARM 
-   if (!($cpu_type eq 'x86') && ($cpu_type eq 'arm')) {
-
-      print "\n*** Warning: this platform may benefit from using SIMDE by setting NTL_SIMDE_LIB=on\n";
-
-   }
-}
-
 
 
 # logic to disable floating-point contractions (FMA) in quad_float.cpp.

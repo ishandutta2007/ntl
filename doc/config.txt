@@ -57,6 +57,21 @@ NTL_GMP_LIP=on   # on/off switch
 
 # If NTL_GMP_LIP=on, the prefix GMP_PREFIX may need to be set (see below).
 
+#### SIMDE
+
+NTL_SIMDE_LIB=on   # on/off switch
+
+# By default, NTL will attempt to use SIMDE the SIMDE library for emulating x86
+# SIMDE intrinsics on other platforms. If this attempt fails, SIMDE will not be
+# used, so there is little risk in leaving this switch turned on.  Turn this on
+# to use the SIMDE library for emulating x86 SIMD intrinsics on Ccurrently only
+# support for AArch64 machines, like Apple M-series chips, is available, and is
+# highly recommended in this case.
+
+# Note that SIMDE is a header-only library, and NTL includes a copy in its own
+# distribution, so you do not have to install SIMDE yourself.
+
+
 #### GF2X 
 
 NTL_GF2X_LIB=off   # on/off switch
@@ -66,15 +81,6 @@ NTL_GF2X_LIB=off   # on/off switch
 
 # If NTL_GF2X_LIB=on, the prefix GF2X_PREFIX may need to be set (see below).
 
-#### GF2X 
-
-NTL_SIMDE_LIB=off   # on/off switch
-
-# Turn this on to use the SIMDE library for emulating x86 SIMD intrinsics on
-# other platforms (currently only support for AArch64 machines, like Apple
-# M-series chips, is available, and is highly recommended in this case).
-
-# If NTL_SIMDE_LIB=on, the prefix SIMDE_PREFIX may need to be set (see below).
 
 
 ########## Paths for installation and auxilliary software components
@@ -128,16 +134,6 @@ GF2X_PREFIX=$(DEF_PREFIX)
 #   GF2X_LIBDIR=$(GF2X_PREFIX)/lib
 # The variables GF2X_INCDIR, GF2X_LIBDIR may be overridden.
 
-#### SIMDE
-
-SIMDE_PREFIX=$(DEF_PREFIX)
-
-# Prefix at which SIMDE components have been installed. Needed if
-# NTL_SIMDE_LIB=on and SIMDE components are not installed in a standard
-# "system" prefix.
-# - header files in $(SIMDE_INCDIR)/simde, where
-#   SIMDE_INCDIR=$(SIMDE_PREFIX)/include 
-# The variable SIMDE_INCDIR may be overridden.
 
 #### Example:
 # If you do not set DEF_PREFIX, GMP_PREFIX, or GMP_INCDIR, it will be assumed

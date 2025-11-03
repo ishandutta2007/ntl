@@ -18,6 +18,8 @@ do
    cp ../include/NTL/$i unix/include/NTL/
 done
 
+cp -RP ../include/NTL/simde unix/include/NTL/
+
 echo "#define NTL_PACKAGE (1)" >> unix/include/NTL/PackageInfo.h
 
 
@@ -33,5 +35,5 @@ do
    cp Check$f.cpp unix/src/
 done
 
-cp -R libtool-seed unix/src
-cp -R libtool-origin unix/src
+cp -RP libtool-seed unix/src
+cp -RP libtool-origin unix/src
