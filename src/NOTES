@@ -27,9 +27,21 @@ documentation:
  - ../doc/tour-unix.html
 
 TODO:
+ - bundle SIMDE with NTL
+   - why? 
+     - we adapt a sepcific version, which could break in future versions
+     - we use only a specific subset 
+     - we can turn it on by default so that macOS users get immediate benefit
+   - update DoConfig, mfile, config.txt (get rid of prefix stuff and checks)
+   - update include paths
+   - put directory under NTL
+   - make install, package need to explicitlt copy
+   - git add NTL/simde directory
+   - get from here:  https://github.com/simd-everywhere/simde-no-tests
  - look at clobber, clean, and uninstall
  - take config.h out of INCL (should not go in tarball)
    DONE: but make sure it doesn't break anything
+ - update ../doc/copying.txt
 
   
 
