@@ -496,7 +496,8 @@ CPPFLAGS=
 LIBTOOL_LINK_FLAGS=
 
 # flags to add to command line when building a shared library.
-# mainly used to pass the argument "-no-undefined" on cygwin
+# For very obscure reasons, you may need to set this to "-no-undefined" on 
+# cygwin
 
 LIBTOOL_LINK_LIBS=undefined
 

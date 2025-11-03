@@ -18,7 +18,7 @@ A Tour of NTL: Obtaining and Installing NTL for UNIX
 
 <p> <hr> <p>
 
-The procedure works on most Unix or Unix-like platorms
+The procedure works on most Unix or Unix-like platforms
 (including Mac OS, and Windows with MinGW or Cygwin tools)
 for building and installing NTL.
 
@@ -53,7 +53,7 @@ The most common and important options:
 <tt>GMP_PREFIX=/path/to/gmp/installation</tt>  
 <ul>
 <li> 
-by defaut, NTL relies on GMP, the GNU multi-precision library, and you will 
+by default, NTL relies on GMP, the GNU multi-precision library, and you will 
 typically have to specify where GMP is installed
 <li>
 the header file <tt>gmp.h</tt> should be located in <tt>$(GMP_PREFIX)/include</tt>, 
@@ -61,11 +61,17 @@ and the library file(s) <tt>libgmp.{a,so}</tt> should be in <tt>$(GMP_PREFIX)/li
 <li>
 note that for best performance, you may want to build GMP from source,
 rather than rely on a system installation, which is often not tuned
-to your particular machine, especially on common x86 linux distributions,
+to your particular machine, especially on common x86 Linux distributions,
 where GMP is often compiled to target a generic x86
 <li>
 see <a href="tour-gmp.html">this page</a> for more
 details about installing GMP
+<li>
+if you really do not want to use GMP, you can pass the
+option <tt>NTL_GMP_LIP=off</tt> --
+however, this is not recommended for applications
+where high performance is important
+
 </ul>
 <li>
 <tt>PREFIX=/path/to/ntl/installation</tt>
@@ -81,11 +87,12 @@ library file(s) <tt>libntl.{a,so}</tt> to <tt>$(PREFIX)/lib</tt>, documentation 
 <tt>DEF_PREFIX=/default/installation/path</tt>
 <ul>
 <li>
-as a short cut, you can set DEF_PREFIX and GMP_PREFIX and PREFIX will 
+as a short cut, you can set <tt>DEF_PREFIX</tt> so that
+<tt>GMP_PREFIX</tt> and <tt>PREFIX</tt> will 
 default to that value
 <li>
-for example, if you are installing both GMP and NTL to $HOME/.local,
-just set DEF_PREFIX=$HOME/.local
+for example, if you are installing both GMP and NTL to <tt>$HOME/.local</tt>,
+just set <tt>DEF_PREFIX=$HOME/.local</tt>
 </ul>
 
 <li>
@@ -103,17 +110,12 @@ to build NTL as a shared (dynamic) library
 <ul>
 <li>
 See <a href="config.txt">config.txt</a> for a complete list
-of configuration options.
+of configuration options and more details about how to use them.
 <li>
 Using these options,
 you can specify name of your compiler (the default
-is <tt>g++</tt>), special compilation flags,
+is <tt>CXX=g++</tt>), special compilation flags,
 and many other details of the compilation process.
-<li>
-If you really do not want to use GMP, you can pass the
-option <tt>NTL_GMP_LIP=off</tt>.
-However, this is not recommended for applications
-where high performance is important.
 </ul>
 
 
@@ -138,7 +140,7 @@ This can take a few minutes.
 You can copy <tt>$(PREFIX)/include/NTL/USER_MAKEFILE.txt</tt> 
 to <tt>makefile</tt> in your current working directory.  
 Then you can compile the program <tt>foo.cpp</tt> into the
-excutable <tt>foo</tt> by executing <tt>make foo</tt>. 
+executable <tt>foo</tt> by executing <tt>make foo</tt>. 
 The <tt>makefile</tt> will compile <tt>foo.cpp</tt> with
 all the right flags and compiler options to ensure a compilation that is
 consistent with NTL's build locates all of the dependencies (header files and
@@ -157,7 +159,7 @@ You can peruse the documentation in <tt>$(PREFIX)/doc</tt>.  Open
 <tt>$(PREFIX)/doc/tour.html</tt> to get the main page of the documentation.
 
 <li>
-You can use the pkg-config file <tt>$(PREFIX)/lib/pkgconfig/ntl.pc</tt> to intregerate 
+You can use the pkg-config file <tt>$(PREFIX)/lib/pkgconfig/ntl.pc</tt> to integrate 
 NTL into a build system such as Cmake/Meson. 
 </ul>
 
@@ -190,7 +192,7 @@ Multi-threading
 <ul>
 <li>
 By default, NTL compiles in a thread safe manner
-(with configuration option <tt>NTL_THREADS=on</tt>n)
+(with configuration option <tt>NTL_THREADS=on</tt>)
 and many internal algorithms will exploit multiple threads
 if they are enabled 
 (with configuration option <tt>NTL_THREAD_BOOST=on</tt>).
@@ -199,12 +201,7 @@ See <a href="tour-ex7.html">this example</a> for more on
 exploiting multiple threads.
 
 <li>
-Note that GMP is thread safe.
-<li>
-Note that <tt>gf2x</tt> is thread safe starting from v1.2 of 
-<tt>gf2x</tt>.
-The NTL build process will check that you have the right version
-of <tt>gf2x</tt>.
+Note that GMP and GF2X are thread safe.
 </ul>
 
 <p>
@@ -230,6 +227,34 @@ don't need fancy exception handling, and (b) there is a
 small performance penalty for enabling exceptions.
 </ul>
 
+<p>
+<h3>Static and shared libraries</h3>
+<p>
+<ul>
+<li>
+By default, only a static library <tt>libntla.a</tt> is built and installed.
+<li>
+The configuration option <tt>SHARED=on</tt>
+will also cause a shared (dynamic) library <tt>libntla.so</tt> 
+is also built.
+<li>
+<tt>libntla.so</tt> is built and installed using <tt>libtool</tt>,
+which is a shell script that NTL builds at configuration time.
+<li>
+In addition to <tt>libntla.so</tt>, <tt>libtool</tt>
+also generates and installs a file <tt>libntl.la</tt> that helps
+<tt>libtool</tt> track library dependencies.
+<li>
+You can even choose to use <tt>libtool</tt> when building
+a static library with the option <tt>ENABLE_LIBTOOL=on</tt>
+(so that the file <tt>libntl.la</tt> is also built and installed) --
+this makes NTL fit better in an established "libtool ecosystem"
+and allows for more options when linking programs and other
+libraries against NTL.
+<li>
+On Cygwin, for obscure reasons, you may have to pass the option
+<tt>LIBTOOL_LINK_FLAGS=-no-undefined</tt>.
+</ul>
 
 
 
