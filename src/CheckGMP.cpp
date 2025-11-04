@@ -1,5 +1,4 @@
 
-
 #include <NTL/config.h>
 
 
