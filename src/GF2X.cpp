@@ -2,7 +2,7 @@
 #include <NTL/GF2X.h>
 #include <NTL/vec_long.h>
 
-#include <cstdio>
+//#include <cstdio>
 
 #if (defined(NTL_WIZARD_HACK) && defined(NTL_GF2X_LIB))
 #undef NTL_GF2X_LIB
