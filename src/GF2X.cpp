@@ -40,8 +40,13 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 static inline void
 pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 {
+//   _mm_storeu_si128((__m128i*)c, 
+//                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
+
    _mm_storeu_si128((__m128i*)c, 
-                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
+                    simde__m128i_from_neon_u64(
+                      vreinterpretq_u64_p128(
+                        vmull_p64((poly64_t) a, (poly64_t) b))));
 }
 
 #else
