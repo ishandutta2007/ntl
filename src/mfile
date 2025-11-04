@@ -605,9 +605,6 @@ install:
 @{NOLTOOL}	cp -p ntl.a $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
 @{NOLTOOL}	- chmod a+r $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL
 @{LTOOL}	$(LIBTOOL) --mode=install cp -p libntl.la $(DESTDIR)$(LIBDIR) #LTOOL
-	- $(MAKE) install_summary
-
-install_summary:
 	@echo 
 	@echo '*** SUMMARY ***'
 	@echo '* include files installed to $(DESTDIR)$(INCLUDEDIR)/NTL'
@@ -616,6 +613,7 @@ install_summary:
 	@echo '* pkg-config file installed to $(DESTDIR)$(PKGDIR)/ntl.pc'
 	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/CONFIG_LOG.txt for a summary of the configuration'
 	@echo '** see $(DESTDIR)$(INCLUDEDIR)/NTL/USER_MAKEFILE.txt for an example makefile to build user programs'
+
 
 uninstall:
 @{NOLTOOL}	rm -f $(DESTDIR)$(LIBDIR)/libntl.a #NOLTOOL

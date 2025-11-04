@@ -26,6 +26,19 @@ documentation:
  - ../doc/config.txt
  - ../doc/tour-unix.html
 
+Observation:
+ - I tried linking shared NTL against a static-only GMP.
+ - On macOS, this worked. 
+ - On Linux, no. For this, I had to build GMP with --with-pic.
+   Then it worked as expected.
+ - This makes me think I should provide the same option for NTL:
+   have an ENABLE_PIC switch. When building a static library
+   using libtool, this will pass -prefer-pic to libtool.
+   Note that this needs to go after gcc, which means we need to
+   sandwhich it somehow. Better idea is to have LCOMPILE do the
+   everything, instead of LCOMP COMPILE, define 
+   LCOMPILE = LCOMP COMPILE LCOMPT
+
 TODO:
  - bundle SIMDE with NTL
    - why? 
