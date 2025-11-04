@@ -354,8 +354,8 @@ if (exists($Variable{'DEF_PREFIX'}) ||
 if (!defined($MakeFlag{'ENABLE_RPATH'})) {
 
    if ($^O ne 'darwin' &&
-         ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || 
-            ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on'))) {
+         ($MakeVal{'GMPL'} eq '' || $MakeVal{'GF2XL'} eq '' || 
+            ($MakeVal{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on'))) {
 
       $MakeFlag{'ENABLE_RPATH'} = 'on';
 
@@ -368,18 +368,6 @@ if (!defined($MakeFlag{'ENABLE_RPATH'})) {
 }
 
 
-#if ((defined($MakeFlag{'ENABLE_RPATH'}) && $MakeFlag{'ENABLE_RPATH'} eq 'on') ||
-#    (!defined($MakeFlag{'ENABLE_RPATH'}) && $^O ne 'darwin' &&
-#      ($MakeSub{'GMPL'} eq '' || $MakeSub{'GF2XL'} eq '' || ($MakeSub{'NTLL'} eq '' && $MakeFlag{'SHARED'} eq 'on')))) {
-#
-#   $MakeFlag{'ENABLE_RPATH'} = 'on';
-#
-#}
-#else {
-#
-#   $MakeFlag{'ENABLE_RPATH'} = 'off';
-#
-#}
 
 
 
