@@ -69,13 +69,16 @@ After installing NTL:
 
 You can copy $(PREFIX)/include/NTL/USER_MAKEFILE.txt to "makefile" in your
 current working directory.  Then you can compile the program "foo.cpp" into the
-excutable "foo" by executing "make foo". The makefile will compile foo.cpp with
-all the right flags and compiler options to ensure a compilation that is
-consistent with NTL's build locates all of the dependencies (header files and
-libraries).  It's useful to look at this makefile to see what compiler flags
-are used and to read the comments in the file to see why they are used on your
-particular system.  Of course, you can use this makefile as a starting point
-for more complex projects.
+excutable "foo" by executing "make foo". 
+- The makefile will compile foo.cpp with all the right flags and compiler 
+  options to ensure a compilation that is
+  consistent with NTL's build, and to ensure that dependencies (header 
+  files and libraries) are located.  
+- It's useful to look at this makefile to see what compiler flags are used 
+  and to read the comments in the file to see why they are used on your
+  particular system.  
+- Of course, you can use this makefile as a starting point for more complex 
+  projects.
 
 You can look at $(PREFIX)/include/NTL/CONFIG_LOG.txt for a summary of all the
 configuration options that were used in this build of NTL.

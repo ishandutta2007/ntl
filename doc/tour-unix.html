@@ -140,14 +140,22 @@ This can take a few minutes.
 You can copy <tt>$(PREFIX)/include/NTL/USER_MAKEFILE.txt</tt> 
 to <tt>makefile</tt> in your current working directory.  
 Then you can compile the program <tt>foo.cpp</tt> into the
-executable <tt>foo</tt> by executing <tt>make foo</tt>. 
+executable <tt>foo</tt> by executing "<tt>make foo</tt>". 
+<ul>
+<li>
 The <tt>makefile</tt> will compile <tt>foo.cpp</tt> with
 all the right flags and compiler options to ensure a compilation that is
-consistent with NTL's build locates all of the dependencies (header files and
-libraries).  It's useful to look at this makefile to see what compiler flags
+consistent with NTL's build, and to ensure that
+all dependencies (header files and
+libraries) are located.  
+<li>
+It's useful to look at this makefile to see what compiler flags
 are used and to read the comments in the file to see why they are used on your
-particular system.  Of course, you can use this makefile as a starting point
+particular system.  
+<li>
+Of course, you can use this makefile as a starting point
 for more complex projects.
+</ul>
 
 <li>
 You can look at <tt>$(PREFIX)/include/NTL/CONFIG_LOG.txt</tt>
@@ -155,8 +163,11 @@ for a summary of all the
 configuration options that were used in this build of NTL.
 
 <li>
-You can peruse the documentation in <tt>$(PREFIX)/doc</tt>.  Open
-<tt>$(PREFIX)/doc/tour.html</tt> to get the main page of the documentation.
+You can peruse the documentation in <tt>$(PREFIX)/doc</tt>.  
+<ul>
+<li>
+Open <tt>$(PREFIX)/doc/tour.html</tt> to get the main page of the documentation.
+</ul>
 
 <li>
 You can use the pkg-config file <tt>$(PREFIX)/lib/pkgconfig/ntl.pc</tt> to integrate 
@@ -232,16 +243,16 @@ small performance penalty for enabling exceptions.
 <p>
 <ul>
 <li>
-By default, only a static library <tt>libntla.a</tt> is built and installed.
+By default, only a static library <tt>libntl.a</tt> is built and installed.
 <li>
 The configuration option <tt>SHARED=on</tt>
 will also cause a shared (dynamic) library <tt>libntla.so</tt> 
-is also built.
+to also be built.
 <li>
 <tt>libntla.so</tt> is built and installed using <tt>libtool</tt>,
 which is a shell script that NTL builds at configuration time.
 <li>
-In addition to <tt>libntla.so</tt>, <tt>libtool</tt>
+In addition to <tt>libntl.so</tt>, <tt>libtool</tt>
 also generates and installs a file <tt>libntl.la</tt> that helps
 <tt>libtool</tt> track library dependencies.
 <li>
