@@ -702,8 +702,8 @@ sub Process_TUNE {
 	 $ConfigSub{'NTL_GF2X_ALTCODE'}        = 0,
 	 $ConfigSub{'NTL_GF2X_ALTCODE1'}       = 0,
       }
-      else {
-	 die "Error: TUNE not in {auto,generic,x86,linux-s390x}\n";
+      elsif ($MakeSub{'TUNE'} ne 'off') {
+	 die "Error: TUNE not in {auto,generic,x86,linux-s390x,off}\n";
       }
    }
 }

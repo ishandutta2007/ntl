@@ -224,6 +224,9 @@ TUNE=generic (or x86 or linux-s390x)
 #   x86         should be well suited for most x86 platforms
 #   linux-s390x should be well suited for Linux on IBM Z platforms 
 #               from z15 onward
+#   off         no performance options set (but they can be set individually
+#               as configuration options)
+
 # More choices may be added in the future.
 # Right now, the default is
 # - x86, if configure detects that is is running on an x86 platform,
@@ -405,9 +408,9 @@ NOCONTRACT=
 
 MAKE_PROG=make
 
-# To set CXXAUTOFLAGS and NOCONTRACT and to make other checks, the configure
-# script actually needs to run make.  If you wish to use a non-standard make
-# program for this purpose, set this variable to point to that program.
+# The configure script actually needs to run make at various points.  If you
+# wish to use a non-standard make program for this purpose, set this variable
+# to point to that program.
 
 
 
