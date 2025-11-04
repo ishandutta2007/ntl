@@ -33,6 +33,9 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 //   _mm_storeu_si128((__m128i*)c, 
 //                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
 
+// This goes through SIMDE's established casting mechanism, except for
+// the C-style cast from (unsigned long) to poly64_t, but that is generally
+// considered safe
    _mm_storeu_si128((__m128i*)c, 
                     simde__m128i_from_neon_u64(
                       vreinterpretq_u64_p128(
