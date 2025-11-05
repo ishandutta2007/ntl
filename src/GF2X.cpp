@@ -37,6 +37,7 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 
 #if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
 
+#if 0
 static inline void
 pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 {
@@ -51,6 +52,18 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
                       vreinterpretq_u64_p128(
                         vmull_p64((poly64_t) a, (poly64_t) b))));
 }
+#else
+static inline void
+pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
+{
+    poly64_t poly_a, poly_b;
+    std::memcpy(&poly_a, &a, sizeof(poly64_t));
+    std::memcpy(&poly_b, &b, sizeof(poly64_t));
+    poly128_t product = vmull_p64(poly_a, poly_b);
+    std::memcpy(c, &product, sizeof(product));
+}
+#endif
+
 
 #else
 #error "configuration error"
