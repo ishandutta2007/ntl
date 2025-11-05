@@ -132,23 +132,6 @@ to be defined.  Of course,  to unset a flag, just replace the
 
 #endif
 
-#if @{NTL_SIMDE_LIB}
-#define NTL_SIMDE_LIB
-
-/* 
- * Use this flag if you want to use the simde library for
- * enabling simd code on non-x86 machines.
- * This can result in significantly faster code, especially
- * mat_lzz_p and GF2X code.
- * You will also have to set the variable SIMDE_OPT_INCDIR
- * in the makefile (this is set automatically
- * by the configuration script when you pass the flag NTL_SIMDE_LIB=on
- * to that script.
- *
- */
-
-#endif
-
 
 #if @{NTL_STD_CXX11}
 #define NTL_STD_CXX11

@@ -2,7 +2,6 @@
 #include <NTL/GF2X.h>
 #include <NTL/vec_long.h>
 
-//#include <cstdio>
 
 #if (defined(NTL_WIZARD_HACK) && defined(NTL_GF2X_LIB))
 #undef NTL_GF2X_LIB
@@ -16,66 +15,7 @@
 
 #define NTL_INLINE inline
 
-#if (defined(__x86_64__))
-
-#include <wmmintrin.h>
-
-static inline void
-pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
-{
-   __m128i aa = _mm_setr_epi64( _mm_cvtsi64_m64(a), _mm_cvtsi64_m64(0));
-   __m128i bb = _mm_setr_epi64( _mm_cvtsi64_m64(b), _mm_cvtsi64_m64(0));
-   _mm_storeu_si128((__m128i*)c, _mm_clmulepi64_si128(aa, bb, 0));
-}
-
-#elif (defined(NTL_SIMDE_LIB))
-
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <NTL/simde/x86/sse2.h>
-//#include <NTL/simde/x86/clmul.h>
-
-
-#if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-
-#if 0
-static inline void
-pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
-{
-//   _mm_storeu_si128((__m128i*)c, 
-//                    (__m128i) vmull_p64((poly64_t) a, (poly64_t) b));
-
-// This goes through SIMDE's established casting mechanism, except for
-// the C-style cast from (unsigned long) to poly64_t, but that is generally
-// considered safe
-   _mm_storeu_si128((__m128i*)c, 
-                    simde__m128i_from_neon_u64(
-                      vreinterpretq_u64_p128(
-                        vmull_p64((poly64_t) a, (poly64_t) b))));
-}
-#else
-static inline void
-pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
-{
-    poly64_t poly_a, poly_b;
-    std::memcpy(&poly_a, &a, sizeof(poly64_t));
-    std::memcpy(&poly_b, &b, sizeof(poly64_t));
-    poly128_t product = vmull_p64(poly_a, poly_b);
-    std::memcpy(c, &product, sizeof(product));
-}
-#endif
-
-
-#else
-#error "configuration error"
-#endif
-
-
-#else
-#error "configuration error"
-
-#endif
-
-
+#include <NTL/simde_pclmul.h>
 
 #else
 

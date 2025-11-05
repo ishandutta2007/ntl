@@ -5,49 +5,7 @@
 #include <iostream>
 
 
-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX2__))
-
-#include <immintrin.h>
-
-#elif (defined(NTL_SIMDE_LIB))
-
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <NTL/simde/x86/avx.h>
-#include <NTL/simde/x86/fma.h>
-
-#if (defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-
-#ifdef _mm256_fmadd_pd
-#undef _mm256_fmadd_pd
-#endif
-
-inline static __m256d
-arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
-{
-   simde__m256d_private
-   r_,
-   a_ = simde__m256d_to_private(a),
-   b_ = simde__m256d_to_private(b),
-   c_ = simde__m256d_to_private(c);
-   r_.m128d[0] = _mm_fmadd_pd(a_.m128d[0], b_.m128d[0], c_.m128d[0]);
-   r_.m128d[1] = _mm_fmadd_pd(a_.m128d[1], b_.m128d[1], c_.m128d[1]);
-   return simde__m256d_from_private(r_);
-}
-
-#define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
-
-#else
-#error "FMA not supported"
-#endif
-
-#else
-#error "FMA not supported"
-#endif
-
-
-
-
-
+#include <NTL/simde_fma.h>
 
 
 #if (NTL_BITS_PER_LONG != 64 || NTL_BITS_PER_INT != 32 || NTL_DOUBLE_PRECISION != 53)
@@ -119,15 +77,6 @@ int main()
    //                  == 0 if not FMA
 
    fun(x, a, b);
-
-// sanity check: we require little endianness for general
-// compatability of memory layout (only needed when using SIMDE)
-
-   int test_var = _ntl_nofold(1);
-   char *test_little_endian = (char*)&test_var;
-   if (!test_little_endian[0]) return -1;
-
-
 
    if (x[0] == 1 && x[1] == 10 && x[2] == 17 && x[3] == 26)
       return 0;

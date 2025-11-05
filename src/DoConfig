@@ -96,7 +96,6 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'NTL_THREAD_BOOST'        => 'on',
 'NTL_GMP_LIP'             => 'on',
 'NTL_GF2X_LIB'            => 'off',
-'NTL_SIMDE_LIB'           => 'on',
 'NTL_X86_FIX'             => 'off',
 'NTL_NO_X86_FIX'          => 'off',
 'NTL_NO_INIT_TRANS'       => 'on',

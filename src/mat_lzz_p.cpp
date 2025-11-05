@@ -8,63 +8,12 @@
 
 
 #ifdef NTL_HAVE_AVX
-
-#if (defined(__x86_64__))
-#include <immintrin.h>
-#elif (defined(NTL_SIMDE_LIB))
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <NTL/simde/x86/avx.h>
-#else
-#error "configuration error"
-#endif
-
+#include <NTL/simde_avx.h>
 #endif
 
 
 #ifdef NTL_HAVE_FMA
-
-#ifndef NTL_HAVE_AVX
-#error "configuration error"
-#endif
-
-#if (defined(__x86_64__))
-
-// native FMA
-
-#elif (defined(NTL_SIMDE_LIB))
-
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <NTL/simde/x86/avx.h>
-#include <NTL/simde/x86/fma.h>
-
-#if defined(SIMDE_ARM_NEON_A64V8_NATIVE)
-
-#ifdef _mm256_fmadd_pd
-#undef _mm256_fmadd_pd
-#endif
-
-inline static __m256d
-arm_fmadd_pd(__m256d a, __m256d b, __m256d c)
-{
-   simde__m256d_private
-   r_,
-   a_ = simde__m256d_to_private(a),
-   b_ = simde__m256d_to_private(b),
-   c_ = simde__m256d_to_private(c);
-   r_.m128d[0] = _mm_fmadd_pd(a_.m128d[0], b_.m128d[0], c_.m128d[0]);
-   r_.m128d[1] = _mm_fmadd_pd(a_.m128d[1], b_.m128d[1], c_.m128d[1]);
-   return simde__m256d_from_private(r_);
-}
-
-#define _mm256_fmadd_pd(a, b, c) arm_fmadd_pd(a, b, c)  
-
-#endif
-
-#elif
-#error "configuration error"
-#endif
-
-
+#include <NTL/simde_fma.h>
 #endif
 
 

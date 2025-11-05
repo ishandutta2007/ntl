@@ -4,26 +4,7 @@
 #include <iostream>
 
 
-#if (defined(__GNUC__) && defined(__x86_64__) && defined(__AVX__))
-
-#include <immintrin.h>
-
-#elif (defined(NTL_SIMDE_LIB))
-
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <NTL/simde/x86/avx.h>
-
-#if (!defined(SIMDE_ARM_NEON_A64V8_NATIVE))
-#error "AVX not supported"
-#endif
-
-#else
-
-#error "AVX not supported"
-
-#endif
-
-
+#include <NTL/simde_avx.h>
 
 
 #if (NTL_BITS_PER_LONG != 64 || NTL_BITS_PER_INT != 32 || NTL_DOUBLE_PRECISION != 53)
@@ -37,15 +18,6 @@
 
 using namespace std;
 
-
-// sanity check: we require little endianness for general
-// compatability of memory layout (only needed when using SIMDE).
-// this means little endian by lane and by byte within a lane.
-int little_endian()
-{
-   __m128i v = _mm_set_epi32(_ntl_nofold(0), _ntl_nofold(0), _ntl_nofold(0), _ntl_nofold(1));
-   return ((char*)&v)[0] == 1;
-}
 
 
 void fun(double * x, const double *a, const double *b)
@@ -85,8 +57,6 @@ int main()
    x[3] = _ntl_nofold(6);
 
    fun(x, a, b);
-
-   if (!little_endian()) return -1;
 
    if (x[0] == 5 && x[1] == 10 && x[2] == 17 && x[3] == 26)
       return 0;
