@@ -32,7 +32,7 @@ pclmul_mul1 (unsigned long *c, unsigned long a, unsigned long b)
 
 
 #else
-#error "AVX not available on this platform"
+#error "PCLMUL not available on this platform"
 #endif
 
 #endif
