@@ -57,20 +57,6 @@ NTL_GMP_LIP=on   # on/off switch
 
 # If NTL_GMP_LIP=on, the prefix GMP_PREFIX may need to be set (see below).
 
-#### SIMDE
-
-NTL_SIMDE_LIB=on   # on/off switch
-
-# By default, NTL will attempt to use SIMDE the SIMDE library for emulating x86
-# SIMDE intrinsics on other platforms. If this attempt fails, SIMDE will not be
-# used, so there is little risk in leaving this switch turned on.  Turn this on
-# to use the SIMDE library for emulating x86 SIMD intrinsics on Ccurrently only
-# support for AArch64 machines, like Apple M-series chips, is available, and is
-# highly recommended in this case.
-
-# Note that SIMDE is a header-only library, and NTL includes a copy in its own
-# distribution, so you do not have to install SIMDE yourself.
-
 
 #### GF2X 
 
