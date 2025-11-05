@@ -396,23 +396,25 @@ ntl.a:	$(OBJ)
 @{NOLTOOL}	- $(RANLIB) ntl.a #NOLTOOL
 @{LTOOL}	$(LIBTOOL) --tag=CXX --mode=link $(LINK) $(LIBTOOL_LINK_FLAGS) -o libntl.la $(OBJ:.o=.lo) $(GMP_OPT_LIBDIR) $(GMP_OPT_LIB) $(GF2X_OPT_LIBDIR) $(GF2X_OPT_LIB) $(LDLIBS) $(LIBTOOL_LINK_LIBS) -rpath $(LIBDIR) $(LIBTOOL_LINK_AS) #LTOOL
 
-@{NOLTOOL}LCOMP= #NOLTOOL
-@{LTOOL}LCOMP=$(LIBTOOL) --tag=CXX --mode=compile #LTOOL
+LCOMP=@{LTOOL}$(LIBTOOL) --tag=CXX --mode=compile #LTOOL
+LCOMPX=@{LTOOL}@{PPIC} -prefer-pic #LTOOL&PPIC 
+
+LCOMPILE=$(LCOMP) $(COMPILE) $(LCOMPX)
 
 lip.o:	lip.cpp 
-	$(LCOMP) $(COMPILE) $(GMP_OPT_INCDIR) lip.cpp
+	$(LCOMPILE) $(GMP_OPT_INCDIR) lip.cpp
 
 GF2X.o:	GF2X.cpp
-	$(LCOMP) $(COMPILE) $(GF2X_OPT_INCDIR) GF2X.cpp
+	$(LCOMPILE) $(GF2X_OPT_INCDIR) GF2X.cpp
 
 mat_lzz_p.o:    mat_lzz_p.cpp
-	$(LCOMP) $(COMPILE) mat_lzz_p.cpp
+	$(LCOMPILE) mat_lzz_p.cpp
 
 quad_float.o:	quad_float.cpp
-	$(LCOMP) $(COMPILE) $(NOCONTRACT) quad_float.cpp
+	$(LCOMPILE) $(NOCONTRACT) quad_float.cpp
 
 pd_FFT.o: pd_FFT.cpp
-	$(LCOMP) $(COMPILE) $(NOCONTRACT) pd_FFT.cpp
+	$(LCOMPILE) $(NOCONTRACT) pd_FFT.cpp
 
 TESTRPATH=@{TESTRPATH}
 CheckCompile: CheckCompile.cpp
@@ -433,7 +435,7 @@ CheckGMP: CheckGMP.cpp
 
 
 .cpp.o: 
-	$(LCOMP) $(COMPILE) $<
+	$(LCOMPILE) $<
 
 .cpp: 
 @{NOLTOOL}	$(LINK) -o $@ $< ntl.a $(GMP_OPT_LIBPATH) $(GMP_OPT_LIB) $(GF2X_OPT_LIBPATH) $(GF2X_OPT_LIB) $(LDLIBS) #NOLTOOL
@@ -720,6 +722,7 @@ WOBJ=FFT.o GetTime.o GetPID.o ctools.o ZZ.o ZZVec.o ZZ_p.o ZZ_pX.o ZZ_pX1.o  \
 
 
 @{LTOOL}wntl.a: LCOMP= #LTOOL
+@{LTOOL}wntl.a: LCOMPX= #LTOOL
 wntl.a:	$(WOBJ) 
 	$(AR) $(ARFLAGS) wntl.a $(WOBJ)
 	- $(RANLIB) wntl.a

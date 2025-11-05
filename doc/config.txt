@@ -153,6 +153,15 @@ ENABLE_LIBTOOL=off   # on/off switch
 # ENABLE_LIBTOOL=on, then in addition to using the libtool program, the
 # makefile relies on some features specific to GNU make.
 
+PREFER_PIC=off   # on/off switch
+
+# Turning on this switch will pass the option -prefer-pic to libtool diring
+# compilation, which will ensure that the code in static a static library is
+# position independent.  This can allow a static NTL library to be linked to by
+# a shared library. Note that on macOS, the compiler generates
+# position-indpendent code by default, so this is not necessary. However, on
+# Linux you will need to turn this switch on.
+
 LIBTOOL=undefined
 
 # If ENABLE_LIBTOOL=on, the makefile will use a libtool script.  By default,
@@ -162,6 +171,8 @@ LIBTOOL=undefined
 # that on macOS, there is a program called libtool, but it cannot be used.
 # Instead, a program called glibtool is necessary, which is typically available
 # through popular package management systems.
+
+
 
 ############# Rpath madness
 

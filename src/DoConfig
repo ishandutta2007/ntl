@@ -31,6 +31,7 @@ system("echo '*** CompilerOutput.log ***' > CompilerOutput.log");
 'SHARED'  => 'off',
 'NATIVE'  => 'on',
 'ENABLE_LIBTOOL' => 'off',
+'PREFER_PIC' => 'off',
 'ENABLE_RPATH' => undef
 );
 
@@ -216,6 +217,16 @@ else {
    $MakeVal{'SHAR'} = '#';
 }
    
+
+# special processing for PREFER_PIC
+
+if ($MakeFlag{'PREFER_PIC'} eq 'on') {
+   $MakeVal{'PPIC'} = '';
+}
+else {
+   $MakeVal{'PPIC'} = '#';
+}
+
    
 
 
