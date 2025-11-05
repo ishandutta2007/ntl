@@ -515,9 +515,12 @@ char *_ntl_make_aligned(char *p, long align)
 #define NTL_AVX512_LOCAL_ARRAY(x, type, n) NTL_ALIGNED_LOCAL_ARRAY(NTL_AVX512_BYTE_ALIGN, x, type, n)
 
 
-#define NTL_DEFAULT_ALIGN (64)
+#define NTL_DEFAULT_ALIGN (128)
 // this should be big enough to satisfy any SIMD instructions,
 // and it should also be as big as a cache line
+// x86 has cache line size of 64, while Aarch64 has cache line size of 128
+// The cache line size requirement is not critical for correctness,
+// but can lead to better memory performance
 
 
 
