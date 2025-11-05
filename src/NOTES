@@ -2,7 +2,8 @@
 
 
 Changes:
-- simde stuff
+- simde stuff - I ended up not using simde...just ported 
+  basic AVX, FMA, and PCLMUL to aarch64
 - set -mcpu=native instead of -march=native for ARM processors
 - tightened up some stuff using volatile to make sure 
   constant folding was disabled during critical configuration calculations
