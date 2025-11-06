@@ -625,21 +625,21 @@ uninstall:
 #
 #  Rules for cleaning up
 #
-#  make clobber removes *everything* created by make,
-#    but it does not restore config.h to its default.
+#  make clobber removes *everything* created by make, except
+#    config.h is left alone
 #
 #  make clean tidies up a bit
 #
 #################################################################
 
 clobber:	
-	rm -f ntl.a mach_desc.h ../include/NTL/mach_desc.h  GetTime.cpp GetPID.cpp
-	sh ResetFeatures '..' "$(FEATURES)" 
+	rm -f ntl.a GetTime.cpp GetPID.cpp
+	rm -f mach_desc.h ../include/NTL/mach_desc.h  
 	rm -f ../include/NTL/gmp_aux.h
+	sh ResetFeatures '..' "$(FEATURES)" 
 	sh RemoveProg $(PROGS) MakeDesc $(AUXPROGS) gen_gmp_aux gf2x_version_1_2_or_later_required
 	rm -f *.o
 	rm -rf small
-	rm -f cfileout mfileout umfileout
 	rm -rf .libs *.lo libntl.la
 	rm -f setup-phase
 

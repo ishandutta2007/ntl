@@ -5,18 +5,20 @@ Changes:
 - simde stuff - I ended up not using simde...just ported 
   basic AVX, FMA, and PCLMUL to aarch64
 - set -mcpu=native instead of -march=native for ARM processors
-- tightened up some stuff using volatile to make sure 
-  constant folding was disabled during critical configuration calculations
-- added USER_MAKEFILE.txt
-- changed ConfigLog.h to CONFIG_LOG.txt
-- added a quick start guide in README
 - added some -Wl,-rpath trickery to make sure we link to the right shared libs
 - added pkg-config stuff
+- added config options ENABLE_LIBTOOL, PREFER_PIC, ENABLE_RPATH, SYS_PREFIX 
 - added DESTDIR to uninstall
-- added ENABLE_LIBTOOL flag
-- added ENABLE_RPATH flag
-- added SYS_PREFIX var
 
+- added a quick start guide in README
+- updated and simplified other installation documentation
+- added USER_MAKEFILE.txt
+- changed ConfigLog.h to CONFIG_LOG.txt
+
+- tightened up some stuff using volatile to make sure 
+  constant folding was disabled during critical configuration calculations
+
+--------------
 - updates to doc files: make sure to update doc/* on the web page 
 
 - The header file ZZ_limbs.h creates an include dependency
@@ -30,7 +32,6 @@ documentation:
 Observation:
 
 TODO:
- - look at clobber, clean, and uninstall
  - take config.h out of INCL (should not go in tarball)
    DONE: but make sure it doesn't break anything
 
