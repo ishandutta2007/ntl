@@ -577,9 +577,6 @@ check:
 #   Also, an attempt is made to make everything that is
 #   installed readable by everyone.
 #
-#   Note: we do not install the simde header files as these are not 
-#   needed by clients.
-#   
 # make uninstall removes these files
 #   
 #################################################################

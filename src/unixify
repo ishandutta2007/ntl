@@ -18,8 +18,6 @@ do
    cp ../include/NTL/$i unix/include/NTL/
 done
 
-cp -RP ../include/NTL/simde unix/include/NTL/
-
 echo "#define NTL_PACKAGE (1)" >> unix/include/NTL/PackageInfo.h
 
 
