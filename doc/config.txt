@@ -149,9 +149,7 @@ ENABLE_LIBTOOL=off   # on/off switch
 # that NTL itself, as well as all of its dependencies, are linked as static
 # libraries, even if shared libraries are also available).
 
-# If SHARED=on, then ENABLE_LIBTOOL is automatically turned on.  Note that if
-# ENABLE_LIBTOOL=on, then in addition to using the libtool program, the
-# makefile relies on some features specific to GNU make.
+# If SHARED=on, then ENABLE_LIBTOOL is automatically turned on.  
 
 PREFER_PIC=off   # on/off switch
 

@@ -718,8 +718,8 @@ WOBJ=FFT.o GetTime.o GetPID.o ctools.o ZZ.o ZZVec.o ZZ_p.o ZZ_pX.o ZZ_pX1.o  \
 	thread.o BasicThreadPool.o fileio.o
 
 
-@{LTOOL}wntl.a: LCOMP= #LTOOL
-@{LTOOL}wntl.a: LCOMPX= #LTOOL
+#@{LTOOL}wntl.a: LCOMP= #LTOOL
+#@{LTOOL}wntl.a: LCOMPX= #LTOOL
 wntl.a:	$(WOBJ) 
 	$(AR) $(ARFLAGS) wntl.a $(WOBJ)
 	- $(RANLIB) wntl.a
