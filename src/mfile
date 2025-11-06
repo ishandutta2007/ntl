@@ -639,7 +639,7 @@ clobber:
 	sh RemoveProg $(PROGS) MakeDesc $(AUXPROGS) gen_gmp_aux gf2x_version_1_2_or_later_required
 	rm -f *.o
 	rm -rf small
-	rm -f cfileout mfileout
+	rm -f cfileout mfileout umfileout
 	rm -rf .libs *.lo libntl.la
 	rm -f setup-phase
 
