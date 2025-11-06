@@ -5,6 +5,13 @@ Changes:
 - simde stuff - I ended up not using simde...just ported 
   basic AVX, FMA, and PCLMUL to aarch64
 - set -mcpu=native instead of -march=native for ARM processors
+
+Speedups:
+- Mat<ZZ_p> n=1000, k=1000, 6.05219 vs 12.8913
+- Mat<zz_p> n=1000, k=20 0.0523988 vs 0.286388
+ GF2X n=10000 5.71701e-06 3.97838e-05
+
+
 - added some -Wl,-rpath trickery to make sure we link to the right shared libs
 - added pkg-config stuff
 - added config options ENABLE_LIBTOOL, PREFER_PIC, ENABLE_RPATH, SYS_PREFIX 
@@ -34,13 +41,6 @@ Observation:
 TODO:
  - take config.h out of INCL (should not go in tarball)
    DONE: but make sure it doesn't break anything
-
-  
-
-Speedups:
-- Mat<ZZ_p> n=1000, k=1000, 6.05219 vs 12.8913
-- Mat<zz_p> n=1000, k=20 0.0523988 vs 0.286388
- GF2X n=10000 5.71701e-06 3.97838e-05
 
 
 

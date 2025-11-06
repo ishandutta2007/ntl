@@ -38,7 +38,7 @@ int main()
    unsigned long b = _ntl_nofold(6);
    unsigned long c[2];
 
-   pclmul_mul1(c, a, b);
+   mul1(c, a, b);
 
    unsigned long c0 = ((unsigned long) _ntl_nofold(1)) << (NTL_BITS_PER_LONG-3);
    unsigned long c1 = _ntl_nofold(2);
