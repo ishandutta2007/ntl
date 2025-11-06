@@ -80,7 +80,7 @@ Improved Karatsuba code for <tt>ZZX</tt> and <tt>GF2EX</tt>
 <ul>
 <li>
 Fixed bug in build logic that prevented compilation
-when not using <tt>gf2x</tt> library.
+when not using the GF2X library.
 </ul>
 
 
@@ -91,7 +91,7 @@ when not using <tt>gf2x</tt> library.
 
 <ul>
 <li>
-Fixed <tt>gf2x</tt> library usage so that it now works with <tt>gf2x-1.3</tt>.
+Fixed GF2X library usage so that it now works with GF2X-v1.3.
 <li>
 Fixed a bug in <tt>FFT.cpp</tt> that could be triggered
 when compiling in some legacy modes.
@@ -553,7 +553,7 @@ except for really weird client code.
 
 <li>
 Added a check in the the build script to ensure that a thread-safe version of
-the <tt>gf2x</tt> library is used (if necessary).
+the GF2X library is used (if necessary).
 
 </ul>
 
@@ -1803,7 +1803,7 @@ This is enabled by configuring with <tt>NTL_PCLMUL=on</tt>
 (and the configuration 
 script automatically checks if it actually works on your platform).
 <p>
-Note that this is an alternative to building NTL against the <tt>gf2x</tt>
+Note that this is an alternative to building NTL against the GF2X
 library (the latter is currently not thread or exception safe).
 <p>
 
@@ -2591,7 +2591,7 @@ Added a callback mechanism to NTL's error reporting function.
 See <tt>ErrorCallback</tt> in <a href="tools.cpp.html">tools.txt</a>.
 
 <li>
-Added support for the <tt>gf2x</tt> library for speeding up
+Added support for the GF2X library for speeding up
 arithmetic in <tt>GF2X</tt> (with help from Emmanuel Thom&eacute;).
 <a href="tour-gf2x.html">Details.</a>
 
