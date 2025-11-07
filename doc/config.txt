@@ -163,7 +163,8 @@ PREFER_PIC=off   # on/off switch
 LIBTOOL=undefined
 
 # If ENABLE_LIBTOOL=on, the makefile will use a libtool script.  By default,
-# this script is freshly built by the configure script.
+# this script is freshly built by the configure script. Note that when using
+# libtool, some modern make features (certainly available on gnu make).
 #
 # One can also define LIBTOOL to point to a pre-built libtool program.  Note
 # that on macOS, there is a program called libtool, but it cannot be used.

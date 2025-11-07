@@ -82,13 +82,21 @@ incantations to make sure we link to the right shared libs
 (not needed on macOS, but needed on Linux)
 <li>
 a pkg-config file <tt>ntl.pc</tt> is generated and installed
+in <tt>$(PREFIX)/lib/pkgconfig</tt>
 <li>
 an example user makefile <tt>USER_MAKEFILE.txt</tt>
-(tailored to the current build of NTL and including
-helpful comments) is generated and installed
+(tailored to the current build of NTL and the user's OS, and including
+helpful comments) is generated and installed in
+<tt>$(PREFIX)/include/NTL</tt>
+<ul>
+<li>
+This will hopefully simplify the life if users who want to easily use
+NTL after it is installed
+</ul>
 <li>
 the configuration log file <tt>ConfigLog.h</tt> is now called
 <tt>CONFIG_LOG.txt</tt>
+(also installed in <tt>$(PREFIX)/include/NTL</tt>)
 <li>
 modified the makefile so that <tt>$(DSTDIR)$</tt> is used in 
 "make uninstall"
