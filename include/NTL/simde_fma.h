@@ -11,13 +11,17 @@
 
 #include <NTL/simde_avx.h>
 
+namespace {
+
 // Fused multiply-add: a*b + c
-static inline __m256d _mm256_fmadd_pd(__m256d a, __m256d b, __m256d c) {
+inline __m256d _mm256_fmadd_pd(__m256d a, __m256d b, __m256d c) {
     __m256d result;
     // vfmaq_f64(c, a, b) computes c + a*b
     result.lo = vfmaq_f64(c.lo, a.lo, b.lo);
     result.hi = vfmaq_f64(c.hi, a.hi, b.hi);
     return result;
+}
+
 }
 
 #else

@@ -11,6 +11,8 @@
 
 #include <arm_neon.h>
 
+namespace {
+
 // Mimic __m256d with a struct of two NEON registers
 typedef struct {
     float64x2_t lo;
@@ -18,7 +20,7 @@ typedef struct {
 } __m256d;
 
 // Load 4 aligned doubles
-static inline __m256d _mm256_load_pd(const double* ptr) {
+inline __m256d _mm256_load_pd(const double* ptr) {
     __m256d result;
     result.lo = vld1q_f64(ptr);
     result.hi = vld1q_f64(ptr + 2);
@@ -26,7 +28,7 @@ static inline __m256d _mm256_load_pd(const double* ptr) {
 }
 
 // Add 4 doubles
-static inline __m256d _mm256_add_pd(__m256d a, __m256d b) {
+inline __m256d _mm256_add_pd(__m256d a, __m256d b) {
     __m256d result;
     result.lo = vaddq_f64(a.lo, b.lo);
     result.hi = vaddq_f64(a.hi, b.hi);
@@ -34,7 +36,7 @@ static inline __m256d _mm256_add_pd(__m256d a, __m256d b) {
 }
 
 // Multiply 4 doubles
-static inline __m256d _mm256_mul_pd(__m256d a, __m256d b) {
+inline __m256d _mm256_mul_pd(__m256d a, __m256d b) {
     __m256d result;
     result.lo = vmulq_f64(a.lo, b.lo);
     result.hi = vmulq_f64(a.hi, b.hi);
@@ -42,17 +44,19 @@ static inline __m256d _mm256_mul_pd(__m256d a, __m256d b) {
 }
 
 // Store 4 aligned doubles
-static inline void _mm256_store_pd(double* ptr, __m256d v) {
+inline void _mm256_store_pd(double* ptr, __m256d v) {
     vst1q_f64(ptr, v.lo);
     vst1q_f64(ptr + 2, v.hi);
 }
 
 // Broadcast a single double to all 4 elements
-static inline __m256d _mm256_broadcast_sd(const double* ptr) {
+inline __m256d _mm256_broadcast_sd(const double* ptr) {
     __m256d result;
     result.lo = vdupq_n_f64(*ptr);
     result.hi = vdupq_n_f64(*ptr);
     return result;
+}
+
 }
 
 
