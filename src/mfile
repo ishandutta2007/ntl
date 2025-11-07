@@ -684,6 +684,10 @@ ppclean:
 	rm -f ../doc/*.cpp
 
 
+TAR=tar 
+# on macOS, should use gtar to avoid xattr data being included
+# no need to make this a config option: just run "make package TAR=gtar"
+
 package:
 	sh unixify "$(SFILES) DIRNAME WINDIR VERSION_INFO NOTES" "$(INCL)" "$(DOC)" "$(FEATURES)"
 	rm -rf `cat DIRNAME`
@@ -691,7 +695,7 @@ package:
 	rm -f `cat DIRNAME`.tar.gz
 	mv unix `cat DIRNAME`
 	chmod -R a+rX `cat DIRNAME`
-	tar -cvf `cat DIRNAME`.tar `cat DIRNAME`
+	$(TAR) -cvf `cat DIRNAME`.tar `cat DIRNAME`
 	gzip `cat DIRNAME`.tar
 	rm -rf `cat DIRNAME`
 
